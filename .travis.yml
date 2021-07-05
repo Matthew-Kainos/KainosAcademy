@@ -4,3 +4,14 @@ node_js:
 script:
  - npm install
  - npm test
+notifications: 
+  email: 
+    recipients: 
+      - matthew.mccaig@kainos.com 
+      - gareth.nelson@hotmail.co.uk 
+      - aileen.tracey@kainos.com 
+      - trionahughes12@gmail.com 
+      - niamhmclarnon828@hotmail.co.uk 
+      - emug@vp.pl
+    on_failure: always 
+    on_success: never
