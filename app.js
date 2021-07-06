@@ -6,7 +6,7 @@ const bands  = require('./routes/bands')
 
 app.use(express.json());
 app.use(express.urlencoded());
-const dbCommands = require('./model/dbCommands');
+//const dbCommands = require('./model/dbCommands');
 
 app.use('/jobs', jobs);
 app.use('/capabilities', jobs);
