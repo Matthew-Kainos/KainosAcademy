@@ -1,25 +1,31 @@
-// const mysql = require('mysql'); 
-// const dbconfig = require('../dbconfig.json'); 
-// const util = require ('util');
+const mysql = require('mysql'); 
+const dbconfig = require('../dbconfig.json'); 
+const util = require ('util');
 
-// function wrapDB (dbconfig) { 
-//     const pool = mysql.createPool(dbconfig) 
-//     return { 
-//         query(sql, args) { 
-//             console.log("in query in wrapper") 
-//             return util.promisify( pool.query ) 
-//             .call(pool, sql, args) 
-//         }, 
-//         release () { 
-//             return util.promisify( pool.releaseConnection ) 
-//             .call( pool ) 
-//         } 
-//     } 
-// }
+function wrapDB (dbconfig) { 
+    const pool = mysql.createPool(dbconfig) 
+    return { 
+        query(sql, args) { 
+            console.log("in query in wrapper") 
+            return util.promisify( pool.query ) 
+            .call(pool, sql, args) 
+        }, 
+        release () { 
+            return util.promisify( pool.releaseConnection ) 
+            .call( pool ) 
+        } 
+    } 
+}
 
-// exports.getEmployees = async () => { 
-//     return await db.query( 
-//         "SELECT * FROM Employee");
-// }
+const db = wrapDB(dbconfig);
 
-// const db = wrapDB(dbconfig);
+exports.getCapabilitiesBasedOnJobId = async (jobId) => { 
+    return await db.query( 
+        "SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.role_id = ? LIMIT 1;", jobId);
+}
+
+
+exports.allJobIds = async () => { 
+    return await db.query( 
+        "SELECT ROLE_ID FROM JobRoles LIMIT 1000;");
+}

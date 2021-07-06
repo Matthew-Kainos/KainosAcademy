@@ -6,12 +6,10 @@ const bands  = require('./routes/bands')
 
 app.use(express.json());
 app.use(express.urlencoded());
-const dbCommands = require('./model/dbCommands');
 
 app.use('/jobs', jobs);
-app.use('/capabilities', jobs);
-app.use('/bands', jobs);
-
+app.use('/capabilities', capabilities);
+app.use('/bands', bands);
 
 // 404 Path
 app.use((req, res) => {
