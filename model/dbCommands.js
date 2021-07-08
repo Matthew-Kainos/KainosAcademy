@@ -17,10 +17,14 @@ function wrapDB (dbconfig) {
     } 
 }
 
-exports.getRolesByBand = async (id) => { 
+exports.getRoleAndBandDB = async (role) => { 
     return await db.query( 
-        "SELECT * FROM JobRoles JOIN Band ON JobRoles.Band_ID "
-        + "= Band.Band_ID WHERE JobRoles.Band_ID = ?", id); 
+        "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID AND JobRoles.Name = ?", role);
+}
+
+exports.getAllRolesAndBandDB = async () => { 
+    return await db.query( 
+        "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID");
 }
 
 const db = wrapDB(dbconfig);
