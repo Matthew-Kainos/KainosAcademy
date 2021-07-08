@@ -32,5 +32,5 @@ exports.allJobIds = async () => {
 
 exports.getFamilyBasedOnCapability = async (capId) => { 
     return await db.query( 
-        "SELECT Job_Family FROM Capabilities WHERE Cap_ID = ? LIMIT 1000;", capId);
+        "SELECT Name, Job_Family FROM Capabilities WHERE Cap_ID = ? LIMIT 1000;", capId);
 }
