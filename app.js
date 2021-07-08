@@ -23,3 +23,5 @@ app.use((req, res) => {
 app.listen(3000, function() { 
     console.log('Express started') 
  });
+
+ module.exports = app;

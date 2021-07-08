@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const dbCommands = require('../model/dbCommands'); 
+const DatabaseError = require('../errors/DatabaseError');
 
 router.get('/family/:id', async function (req, res) {
     try{
@@ -10,9 +11,13 @@ router.get('/family/:id', async function (req, res) {
         res.send(results);
         res.status(200);
     } catch(e){
-        console.log(e);
         res.status(500);
+        if(e instanceof DatabaseError) {
+            res.send('Database Error');
+            console.error(e.message);
+        }
         res.send('Error');
+        console.error(e.message);
     }
 })
   
