@@ -1,6 +1,8 @@
 const mysql = require('mysql'); 
-const dbconfig = require('../dbconfig.json'); 
 const util = require ('util');
+const dbconfig = require('../dbconfig.json'); 
+const DatabaseError = require('../errors/DatabaseError');
+
 
 function wrapDB (dbconfig) { 
     const pool = mysql.createPool(dbconfig) 
@@ -16,10 +18,14 @@ function wrapDB (dbconfig) {
         } 
     } 
 }
+//add to tests:
+const db = wrapDB(dbconfig);
 
 exports.getJobRoles = async () => { 
-    return await db.query( 
-        "SELECT Role_ID, Name FROM JobRoles");
+    try{
+        return await db.query( 
+            "SELECT Role_ID, JobRoles.Name, Level FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level");
+    } catch(e) {
+        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
+    }
 }
-
-const db = wrapDB(dbconfig);
