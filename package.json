@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "integrationTests": "mocha tests/integrationTests --exit"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/Matthew-Kainos/KainosAcademy#readme",
   "dependencies": {
+    "chai": "^4.3.4",
     "express": "^4.17.1",
     "mocha": "^9.0.2",
     "mysql": "^2.18.1",
