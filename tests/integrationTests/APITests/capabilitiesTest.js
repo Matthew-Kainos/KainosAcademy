@@ -26,13 +26,14 @@ describe('Capabilities', function() {
     it('Should return 500 if there is a database error', function() {
       const getCapabilitiesBasedOnJobIdStub = sinon.stub(dbCommands, "getCapabilitiesBasedOnJobId");
       getCapabilitiesBasedOnJobIdStub.throws(new DatabaseError);
-      return request(app)
+      request(app)
         .get('/capabilities/findByJobId/1')
         .set('Accept', 'application/json')
         .expect(500)
         .then(response => {
             expect(response.text).equal('Database Error');
         });
+        getCapabilitiesBasedOnJobIdStub.restore();
     });
   });
 })
