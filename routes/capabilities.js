@@ -11,7 +11,7 @@ router.get('/findByJobId/:id', async function (req, res) {
         res.status(200);
     } catch(e){
         res.status(500);
-        if(e.instanceOf(DatabaseError)) {
+        if(e instanceof DatabaseError) {
             res.send('Database Error');
             console.error(e.message);
         }
