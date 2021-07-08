@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
-const dbCommands = require('../model/dbCommands'); 
+const dbCommands = require('../model/dbCommands');
+const DatabaseError = require('../errors/DatabaseError'); 
 
 router.get('/findByJobId/:id', async function (req, res) {
     try{
@@ -10,7 +11,12 @@ router.get('/findByJobId/:id', async function (req, res) {
         res.status(200);
     } catch(e){
         res.status(500);
+        if(e.instanceOf(DatabaseError)) {
+            res.send('Database Error');
+            console.error(e.message);
+        }
         res.send('Error');
+        console.error(e.message);
     }
 })
   
