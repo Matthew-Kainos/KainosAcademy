@@ -1,6 +1,7 @@
 const mysql = require('mysql'); 
 const dbconfig = require('../dbconfig.json'); 
 const util = require ('util');
+const DatabaseError = require('../errors/DatabaseError');
 
 function wrapDB (dbconfig) { 
     const pool = mysql.createPool(dbconfig) 
@@ -23,10 +24,15 @@ exports.getEmployees = async () => {
 }
 
 exports.getJobSpec = async (Role_ID) => {
-    return await db.query(
-       "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
-       + " FROM JobRoles WHERE Role_ID = ?",
-       [Role_ID])
+    try{
+        return await db.query(
+            "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
+            + " FROM JobRoles WHERE Role_ID = ?",
+            [Role_ID])
+    }catch(e){
+        throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
+    }
+    
  }
 
 const db = wrapDB(dbconfig);
