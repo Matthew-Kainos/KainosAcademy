@@ -17,11 +17,12 @@
      }
  }
 
- exports.getEmployees = async () => {
-     return await db.query(
-         "SELECT * FROM Employee");
- }
 
- exports.getCapabilityLeads
+
+ exports.getCapabilityLead = async (capID) => {
+    return await db.query(
+    "SELECT Cap_ID, Name, Job_Family, LeadName, LeadMessage FROM Capabilities WHERE Cap_ID=?;", capID);
+
+ }
 
  const db = wrapDB(dbconfig);

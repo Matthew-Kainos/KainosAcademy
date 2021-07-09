@@ -9,8 +9,9 @@ app.use(express.urlencoded());
 //const dbCommands = require('./model/dbCommands');
 
 app.use('/jobs', jobs);
-app.use('/capabilities', jobs);
-app.use('/bands', jobs);
+app.use('/capabilities', capabilities);
+app.use('/bands', bands);
+
 
 
 // 404 Path
@@ -23,3 +24,5 @@ app.use((req, res) => {
 app.listen(3000, function() { 
     console.log('Express started') 
  });
+
+ module.exports = app;
