@@ -1,12 +1,22 @@
-var express = require('express')
-var router = express.Router()
-const dbCommands = require('../model/dbCommands');
+const express = require('express');
+const router = express.Router();
+const dbCommands = require('../model/dbCommands'); 
 const DatabaseError = require('../errors/DatabaseError'); 
 
-
-router.get('/hello', function (req, res) {
-    res.status(200);
-    res.send('Hello');
+router.get('/checkIfJobExists/:jobID', async function (req, res) {
+    try{
+        const jobID = req.params.jobID;
+        const results = await dbCommands.checkIfJobIdExists(jobID);
+        res.status(200);
+        if(results.length > 0){
+            res.send(JSON.stringify(true));
+        } else {
+            res.send(JSON.stringify(false));
+        }
+    } catch(e){
+        res.status(500);
+        res.send('Error');
+    }
 })
 
 

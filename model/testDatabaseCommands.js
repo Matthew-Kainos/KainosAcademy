@@ -117,3 +117,4 @@ exports.testDeleteBand = async (name) => {
         throw new DatabaseError(`Error calling testDeleteBand with message: ${e.message}`);
     }
 }
+
