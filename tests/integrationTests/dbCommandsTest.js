@@ -104,6 +104,21 @@ describe('dbCommands', async function() {
       } catch(e){
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getAllRolesAndBandDB with message');
+  });
+
+  describe('getCapabilitiesBasedOnJobId', async function() {
+    it('Should successfully return Capablity Name and Capability Id based on Job Role Id', async function() {
+      const result = await dbCommands.getCapabilitiesBasedOnJobId(jobRoleTestDetails.roleId);
+      expect(result[0].cap_id).equal(capabilityTestDetails.capId);
+      expect(result[0].name).equal(capabilityTestDetails.name);
+    });
+    it('Should successfully throw Database Error if connection', async function() {
+      try{     
+        await dbCommands.getCapabilitiesBasedOnJobId(null);
+      } catch(e){
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobId with message');
+
       }
     });
   });

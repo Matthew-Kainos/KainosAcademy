@@ -25,6 +25,23 @@ router.get('/band', async function (req, res) {
         res.send('Error');
     }
 })
+
+router.get('/checkIfJobExists/:jobID', async function (req, res) {
+    try{
+        const jobID = req.params.jobID;
+        const results = await dbCommands.checkIfJobIdExists(jobID);
+        res.status(200);
+        if(results.length > 0){
+            res.send(JSON.stringify(true));
+        } else {
+            res.send(JSON.stringify(false));
+        }
+
+    } catch(e){
+        res.status(500);
+        res.send('Error');
+    }
+})
   
 module.exports = router
   
