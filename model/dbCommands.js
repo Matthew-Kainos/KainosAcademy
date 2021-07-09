@@ -17,14 +17,22 @@ function wrapDB (dbconfig) {
     } 
 }
 
-exports.getRoleAndBandDB = async (role) => { 
-    return await db.query( 
-        "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID AND JobRoles.Name = ?", role);
+exports.getRoleAndBandDB = async (role) => {
+    try{ 
+        return await db.query( 
+            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID AND JobRoles.Name = ?", role);
+    } catch(e) {
+        throw new DatabaseError(`Error calling getRoleAndBandDB with message: ${e.message}`);
+    }
 }
 
 exports.getAllRolesAndBandDB = async () => { 
-    return await db.query( 
-        "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID");
+    try{
+        return await db.query( 
+            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID");
+    } catch(e) {
+        throw new DatabaseError(`Error calling getAllRolesAndBandDB with message: ${e.message}`);
+    }
 }
 
 const db = wrapDB(dbconfig);
