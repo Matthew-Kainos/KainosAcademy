@@ -1,15 +1,16 @@
-const chai = require('chai');  
-const expect = chai.expect;
+const chai = require('chai');
+
+const { expect } = chai;
 
 // Test File
 // Delete when done
-describe('Capabilities', function() {
-  describe('Name of Method', function() {
-    it('Name of Test Success', function() {
+describe('Capabilities', () => {
+  describe('Name of Method', () => {
+    it('Name of Test Success', () => {
       expect([1, 2, 3].indexOf(4)).equal(-1);
     });
-    it('Name of Test Failure', function() {
+    it('Name of Test Failure', () => {
       expect([1, 2, 3].indexOf(4)).equal(-1);
     });
   });
-})
+});
