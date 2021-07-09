@@ -3,7 +3,7 @@ const expect = chai.expect;
 
 // Test File
 // Delete when done
-describe('Name Of Class', function() {
+describe('Capabilities', function() {
   describe('Name of Method', function() {
     it('Name of Test Success', function() {
       expect([1, 2, 3].indexOf(4)).equal(-1);

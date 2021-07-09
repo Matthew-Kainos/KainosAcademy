@@ -1,7 +1,7 @@
 const mysql = require('mysql'); 
-const dbconfig = require('../dbconfig.json'); 
 const util = require ('util');
-const DatabaseError = require('../errors/DatabaseError');
+const dbconfig = require('../dbconfig.json'); 
+const DatabaseError = require('../errors/DatabaseError'); 
 
 function wrapDB (dbconfig) { 
     const pool = mysql.createPool(dbconfig) 
@@ -47,11 +47,6 @@ exports.testInsertCapability = async (jobId) => {
     }
 }
 
-exports.getEmployees = async () => { 
-    return await db.query( 
-        "SELECT * FROM Employee");
-}
-
 exports.getJobSpec = async (Role_ID) => {
     try{
         return await db.query(
@@ -63,4 +58,3 @@ exports.getJobSpec = async (Role_ID) => {
     }
     
  }
-

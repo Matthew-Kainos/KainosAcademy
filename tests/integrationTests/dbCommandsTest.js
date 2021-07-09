@@ -85,5 +85,4 @@ describe('dbCommands', async function() {
       }
     });
   });
-
 })
