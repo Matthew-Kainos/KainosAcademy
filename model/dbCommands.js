@@ -25,7 +25,7 @@ exports.getJobRoles = async () => {
         return await db.query( 
             "SELECT Role_ID, JobRoles.Name, Level FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level");
     } catch(e) {
-        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
+        throw new DatabaseError(`Error calling getJobRoles with message: ${e.message}`);
     }
 }
 

@@ -66,6 +66,7 @@ describe('dbCommands', async function() {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobId with message');
       }
+    })
     });
     
   describe('getCapabilitiesBasedOnJobId', async function() {
