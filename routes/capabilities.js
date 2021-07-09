@@ -3,10 +3,10 @@ const router = express.Router();
 const dbCommands = require('../model/dbCommands');
 const DatabaseError = require('../errors/DatabaseError'); 
 
-router.get('/findByJobId/:id', async function (req, res) {
+router.get('/findByJobName/:jobName', async function (req, res) {
     try{
-        const jobId = req.params.id;
-        const results = await dbCommands.getCapabilitiesBasedOnJobId(jobId);
+        const name = req.params.jobName;
+        const results = await dbCommands.getCapabilitiesBasedOnJobName(name);
         res.send(results);
         res.status(200);
     } catch(e){

@@ -20,29 +20,20 @@ function wrapDB (dbconfig) {
 
 const db = wrapDB(dbconfig);
 
-exports.getCapabilitiesBasedOnJobId = async (jobId) => { 
+exports.getCapabilitiesBasedOnJobName = async (name) => { 
     try{
         return await db.query( 
-            "SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.role_id = ? LIMIT 1;", jobId);
+            "SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.Name = ? LIMIT 1;", name);
     } catch(e) {
-        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
+        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobName with message: ${e.message}`);
     }
 }
 
-exports.checkIfJobIdExists = async (jobId) => { 
+exports.checkIfJobExists = async (name) => { 
     try{
         return await db.query( 
-            "SELECT * FROM JobRoles WHERE ROLE_ID = ? LIMIT 10;", jobId);
+            "SELECT * FROM JobRoles WHERE Name = ? LIMIT 10;", name);
         } catch(e) {
-        throw new DatabaseError(`Error calling checkIfJobIdExists with message: ${e.message}`);
-    }
-}
-
-exports.testInsertCapability = async (jobId) => { 
-    try{
-        return await db.query( 
-            'INSERT INTO Capabilities values (90000, "TestName", "TestJobFamily","TestLeadName", "TestLeadMessage", 2)');
-        } catch(e) {
-        throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
+        throw new DatabaseError(`Error calling checkIfJobExists with message: ${e.message}`);
     }
 }
