@@ -52,6 +52,29 @@ describe('dbCommands', async function() {
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
   });
 
+  describe('checkIfJobExists', async function() {
+    it('Should successfully return job role details if job exists using full name to query', async function() {
+      const result = await dbCommands.checkIfJobExists(jobRoleTestDetails.name);
+      expect(result[0].Name).equal(jobRoleTestDetails.name);
+    });
+    it('Should successfully return job role details if job exists using partial name to query', async function() {
+      const result = await dbCommands.checkIfJobExists('%Test%');
+      expect(result[0].Name).equal(jobRoleTestDetails.name);
+    });
+    it('Should successfully return empty result if job name is not valid', async function() {
+      const result = await dbCommands.checkIfJobExists('abc');
+      expect(result.length).equal(0);
+    });
+    it('Should successfully throw Database Error if error occured in database', async function() {
+      try{     
+        await dbCommands.checkIfJobExists(null);
+      } catch(e){
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling checkIfJobExists with message');
+      }
+    });
+  });
+
   describe('getCapabilitiesBasedOnJobName', async function() {
     it('Should successfully return Capablity Name and Capability Id based on Job Role Name', async function() {
       const result = await dbCommands.getCapabilitiesBasedOnJobName(jobRoleTestDetails.name);
@@ -89,4 +112,31 @@ describe('dbCommands', async function() {
 
 })
   
+
+  describe('getAllJobsWithCapability', async function() {
+    it('Should successfully return all Jobs with Capablity Name and Capability Id', async function() {
+      const result = await dbCommands.getAllJobsWithCapability();
+      expect(result[result.length-1].cap_id).equal(capabilityTestDetails.capId);
+      expect(result[result.length-1].CapabilityName).equal(capabilityTestDetails.name);
+      expect(result[result.length-1].JobRoleName).equal(jobRoleTestDetails.name);
+    });
+  });
+
+  describe('getJobSpec', async function() {
+    it('Should successfully return the Job Specefication Name, ID, Specification Summary and Specification link based on Job Role Id', async function() {
+      const result = await dbCommands.getJobSpec(jobRoleTestDetails.roleId);
+      expect(result[0].Name).equal(jobRoleTestDetails.name);
+      expect(result[0].Spec_Sum).equal(jobRoleTestDetails.specSum);
+      expect(result[0].Spec_Link).equal(jobRoleTestDetails.specLink);
+
+    });
+    it('Should successfully throw Database Error if connection', async function() {
+      try{     
+        await dbCommands.getJobSpec(null);
+      } catch(e){
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getJobSpec with message');
+      }
+    });
+  });
 

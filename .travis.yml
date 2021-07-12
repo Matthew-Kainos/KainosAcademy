@@ -3,7 +3,7 @@ node_js:
  - "14"
 script:
  - npm install
- - npm test
+ - npm run apiTests
 notifications: 
   email: 
     recipients: 

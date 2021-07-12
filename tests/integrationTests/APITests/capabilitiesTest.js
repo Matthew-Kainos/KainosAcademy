@@ -22,17 +22,48 @@ describe('Capabilities', function() {
             expect(response.text).equal(JSON.stringify(returnedResults));
         });
         getFamilyBasedOnCapabilityStub.restore();
+      });
+        it('Should return 500 if there is a database error', function() {
+          const getFamilyBasedOnCapabilityStub = sinon.stub(dbCommands, "getFamilyBasedOnCapability");
+          getFamilyBasedOnCapabilityStub.throws(new DatabaseError);
+          request(app)
+            .get('/capabilities/family/1')
+            .set('Accept', 'application/json')
+           .expect(500)
+           .then(response => {
+            expect(response.text).equal('Database Error');
+        });
+          getFamilyBasedOnCapabilityStub.restore();
+        });
+        
+  
+  
+  describe('findByJobName', function() {
+    it('Should return 200 and correct results if called', function() {
+      const returnedResults = { name: 'fakeJobName'};
+      const getCapabilitiesBasedOnJobNameStub = sinon.stub(dbCommands, "getCapabilitiesBasedOnJobName");
+      getCapabilitiesBasedOnJobNameStub.returns(returnedResults);
+      request(app)
+        .get('/capabilities/findByJobName/fakeJobName')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then(response => {
+            expect(response.text).equal(JSON.stringify(returnedResults));
+        });
+        getCapabilitiesBasedOnJobNameStub.restore();
     });
     it('Should return 500 if there is a database error', function() {
-      const getFamilyBasedOnCapabilityStub = sinon.stub(dbCommands, "getFamilyBasedOnCapability");
-      getFamilyBasedOnCapabilityStub.throws(new DatabaseError);
-      return request(app)
-        .get('/capabilities/family/1')
+      const getCapabilitiesBasedOnJobNameStub = sinon.stub(dbCommands, "getCapabilitiesBasedOnJobName");
+      getCapabilitiesBasedOnJobNameStub.throws(new DatabaseError);
+      request(app)
+        .get('/capabilities/findByJobName/fakeJob')
         .set('Accept', 'application/json')
         .expect(500)
         .then(response => {
             expect(response.text).equal('Database Error');
         });
+        getCapabilitiesBasedOnJobNameStub.restore();
     });
+  });
   });
 })

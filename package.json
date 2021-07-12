@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests",
-    "start": "nodemon app.js",
     "integrationTests": "mocha tests/integrationTests --exit",
-    "apiTests": "mocha tests/integrationTests/APITests --exit"
+    "apiTests": "mocha tests/integrationTests/APITests --exit",
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Matthew-Kainos/KainosAcademy.git"
   },
-  "author": "Aileen Tracey <aileen.tracey@kainos.com>",
+  "author": "Group B",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Matthew-Kainos/KainosAcademy/issues"
@@ -25,7 +25,6 @@
     "mocha": "^9.0.2",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.9",
-    "nunjucks": "^3.2.3",
     "sinon": "^11.1.1",
     "supertest": "^6.1.3"
   }

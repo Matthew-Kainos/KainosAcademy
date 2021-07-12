@@ -1,6 +1,6 @@
 const mysql = require('mysql'); 
-const dbconfig = require('../dbconfig.json'); 
 const util = require ('util');
+const dbconfig = require('../dbconfig.json'); 
 const DatabaseError = require('../errors/DatabaseError'); 
 
 function wrapDB (dbconfig) { 
@@ -28,7 +28,6 @@ exports.getCapabilitiesBasedOnJobName = async (name) => {
         throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobName with message: ${e.message}`);
     }
 }
-
 
 exports.getAllJobsWithCapability = async () => { 
     try{
@@ -67,3 +66,14 @@ exports.checkIfCapabilityExists = async (capName) => {
     }
 }
 
+exports.getJobSpec = async (Role_ID) => {
+    try{
+        return await db.query(
+            "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
+            + " FROM JobRoles WHERE Role_ID = ?",
+            [Role_ID])
+    }catch(e){
+        throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
+    }
+    
+ }
