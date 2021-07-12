@@ -66,7 +66,7 @@ exports.getAllRolesAndBandDB = async () => {
     }
 }
 
-exports.getJobSpec = async (Role_ID) => {
+exports.getJobSpec = async (roleID) => {
     try{
         return await db.query(
             "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
