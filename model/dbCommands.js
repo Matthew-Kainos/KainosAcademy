@@ -18,6 +18,7 @@ function wrapDB (dbconfig) {
     } 
 }
 
+
 const db = wrapDB(dbconfig);
 
 exports.getCapabilitiesBasedOnJobName = async (name) => { 
@@ -47,7 +48,25 @@ exports.checkIfJobExists = async (name) => {
     }
 }
 
-exports.getJobSpec = async (roleID) => {
+exports.getRoleAndBandDB = async (role) => {
+    try{ 
+        return await db.query( 
+            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID AND JobRoles.Name = ?", role);
+    } catch(e) {
+        throw new DatabaseError(`Error calling getRoleAndBandDB with message: ${e.message}`);
+    }
+}
+
+exports.getAllRolesAndBandDB = async () => { 
+    try{
+        return await db.query( 
+            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID");
+    } catch(e) {
+        throw new DatabaseError(`Error calling getAllRolesAndBandDB with message: ${e.message}`);
+    }
+}
+
+exports.getJobSpec = async (Role_ID) => {
     try{
         return await db.query(
             "SELECT Name, Role_ID, Spec_Sum, Spec_Link"

@@ -12,10 +12,9 @@ app.use('/capabilities', capabilities);
 app.use('/bands', bands);
 
 app.get('/job-roles-spec/:roleID', function (req, res){
-    res.send('On job roles spec page')
-})
+      res.send('On job roles spec page')
+}) 
 
-// 404 Path 
 app.use((req, res) => {
     res.status(404).json({
         message: `Unable to find path ${req.path}`
