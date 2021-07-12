@@ -68,7 +68,7 @@ describe('Jobs', function () {
 describe('Jobs', function() {
   describe('getJobSpec', function() {
     it('Should return 200 and correct results if called', function() {
-      const returnedResults = { role_id: 'fakeId'};
+      const returnedResults = { roleID: 'fakeId'};
       const getJobSpec = sinon.stub(dbCommands, "getJobSpec");
       getJobSpec.returns(returnedResults);
       request(app)
