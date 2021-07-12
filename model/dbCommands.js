@@ -48,7 +48,6 @@ exports.checkIfJobExists = async (name) => {
     }
 }
 
-
 exports.getRoleAndBandDB = async (role) => {
     try{ 
         return await db.query( 
@@ -67,12 +66,12 @@ exports.getAllRolesAndBandDB = async () => {
     }
 }
 
-exports.getJobSpec = async (Role_ID) => {
+exports.getJobSpec = async (roleID) => {
     try{
         return await db.query(
             "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
             + " FROM JobRoles WHERE Role_ID = ?",
-            [Role_ID])
+            [roleID])
     }catch(e){
         throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
     }
