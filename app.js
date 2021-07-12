@@ -1,8 +1,9 @@
 const express = require('express');
+
 const app = express();
-const jobs  = require('./routes/jobs');
-const capabilities  = require('./routes/capabilities')
-const bands  = require('./routes/bands')
+const jobs = require('./routes/jobs');
+const capabilities = require('./routes/capabilities');
+const bands = require('./routes/bands');
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -11,19 +12,19 @@ app.use('/jobs', jobs);
 app.use('/capabilities', capabilities);
 app.use('/bands', bands);
 
-app.get('/job-roles-spec/:Role_ID', function (req, res){
-    res.send('On job roles spec page')
-})
+app.get('/job-roles-spec/:roleID', (req, res) => {
+  res.send('On job roles spec page');
+});
 
-// 404 Path 
+// 404 Path
 app.use((req, res) => {
-    res.status(404).json({
-        message: `Unable to find path ${req.path}`
-    })
-})
+  res.status(404).json({
+    message: `Unable to find path ${req.path}`,
+  });
+});
 
-app.listen(3000, function() { 
-    console.log('Express started') 
- });
+app.listen(3000, () => {
+  console.log('Express started');
+});
 
- module.exports = app;
+module.exports = app;
