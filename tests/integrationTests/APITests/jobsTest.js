@@ -78,18 +78,19 @@ describe('Jobs', function() {
         .then(response => {
             expect(response.text).equal(JSON.stringify(returnedResults));
         });
-        getCapabilitiesBasedOnJobIdStub.restore();
+        getJobSpec.restore();
     });
     it('Should return 500 if there is a database error', function() {
       const getJobSpec = sinon.stub(dbCommands, "getJobSpec");
       getJobSpec.throws(new DatabaseError);
-      return request(app)
+      request(app)
         .get('/jobs/job-roles-spec/1')
         .set('Accept', 'application/json')
         .expect(500)
         .then(response => {
             expect(response.text).equal('Database Error');
         });
+        getJobSpec.restore();
     });
   });
 }) 
