@@ -21,47 +21,41 @@ function wrapDB (dbconfig) {
 
 const db = wrapDB(dbconfig);
 
-exports.getCapabilitiesBasedOnJobId = async (jobId) => { 
+exports.getCapabilitiesBasedOnJobName = async (name) => { 
     try{
         return await db.query( 
-            "SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.role_id = ? LIMIT 1;", jobId);
+            "SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.Name LIKE ? LIMIT 1;", name);
     } catch(e) {
-        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
+        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobName with message: ${e.message}`);
     }
 }
 
-exports.checkIfJobIdExists = async (jobId) => { 
+exports.getAllJobsWithCapability = async () => { 
     try{
         return await db.query( 
-            "SELECT * FROM JobRoles WHERE ROLE_ID = ? LIMIT 10;", jobId);
+            "SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id");
         } catch(e) {
-        throw new DatabaseError(`Error calling checkIfJobIdExists with message: ${e.message}`);
+        throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
     }
 }
 
-exports.testInsertCapability = async (jobId) => { 
+exports.checkIfJobExists = async (name) => { 
     try{
         return await db.query( 
-            'INSERT INTO Capabilities values (90000, "TestName", "TestJobFamily","TestLeadName", "TestLeadMessage", 2)');
+            "SELECT * FROM JobRoles WHERE Name LIKE ? LIMIT 10;", name);
         } catch(e) {
-        throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
+        throw new DatabaseError(`Error calling checkIfJobExists with message: ${e.message}`);
     }
 }
 
-exports.getRoleAndBandDB = async (role) => {
-    try{ 
-        return await db.query( 
-            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID AND JobRoles.Name = ?", role);
-    } catch(e) {
-        throw new DatabaseError(`Error calling getRoleAndBandDB with message: ${e.message}`);
-    }
-}
-
-exports.getAllRolesAndBandDB = async () => { 
+exports.getJobSpec = async (Role_ID) => {
     try{
-        return await db.query( 
-            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID");
-    } catch(e) {
-        throw new DatabaseError(`Error calling getAllRolesAndBandDB with message: ${e.message}`);
+        return await db.query(
+            "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
+            + " FROM JobRoles WHERE Role_ID = ?",
+            [Role_ID])
+    }catch(e){
+        throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
     }
-}
+    
+ }
