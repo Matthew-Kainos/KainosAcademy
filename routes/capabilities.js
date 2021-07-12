@@ -6,7 +6,7 @@ const DatabaseError = require('../errors/DatabaseError');
 router.get('/findByJobName/:jobName', async function (req, res) {
     try{
         const name = req.params.jobName;
-        const results = await dbCommands.getCapabilitiesBasedOnJobName(name);
+        const results = await dbCommands.getCapabilitiesBasedOnJobName(`%${name}%`);
         res.send(results);
         res.status(200);
     } catch(e){
