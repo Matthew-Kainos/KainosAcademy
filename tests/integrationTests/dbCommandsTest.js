@@ -64,7 +64,7 @@ describe('dbCommands', async function() {
         await dbCommands.getJobRoles(null);
         } catch(e){
         expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobId with message');
+        expect(e.message).to.include('Error calling getJobRoles with message');
       }
     })
     });
