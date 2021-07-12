@@ -11,7 +11,7 @@ const DatabaseError = require('../../../errors/DatabaseError');
 describe('Capabilities', function() {
   describe('family', function() {
     it('Should return 200 and correct results if called', function() {
-      const returnedResults = { role_id: 'fakeId'};
+      const returnedResults = { capName: 'fakeCapName'};
       const getFamilyBasedOnCapabilityStub = sinon.stub(dbCommands, "getFamilyBasedOnCapability");
       getFamilyBasedOnCapabilityStub.returns(returnedResults);
       request(app)

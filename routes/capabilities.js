@@ -3,10 +3,10 @@ const router = express.Router();
 const dbCommands = require('../model/dbCommands'); 
 const DatabaseError = require('../errors/DatabaseError');
 
-router.get('/family/:id', async function (req, res) {
+router.get('/family/:capName', async function (req, res) {
     try{
-        const capId = req.params.id;
-        const results = await dbCommands.getFamilyBasedOnCapability(capId);
+        const capName = req.params.capName;
+        const results = await dbCommands.getFamilyBasedOnCapability(capName);
         console.log(results);
         res.send(results);
         res.status(200);
@@ -20,5 +20,32 @@ router.get('/family/:id', async function (req, res) {
         console.error(e.message);
     }
 })
+
+router.get('/checkIfCapabilityExists/:capName', async function (req, res) {
+    try{
+        const capName = req.params.capName;
+        const results = await dbCommands.checkIfCapabilityExists(capName);
+        res.status(200);
+        if(results.length > 0){
+            res.send(JSON.stringify(true));
+        } else {
+            res.send(JSON.stringify(false));
+        }
+    } catch(e){
+        res.status(500);
+        res.send('Error');
+    }
+}) 
+
+router.get('/getAllFamiliesWithCapability', async function (req, res) {
+    try{
+        const results = await dbCommands.getAllFamiliesWithCapability();
+        res.send(results);
+    } catch(e){
+        res.status(500);
+        res.send('Error');
+    }
+})
+
   
 module.exports = router  

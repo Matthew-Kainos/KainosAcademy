@@ -52,27 +52,27 @@ describe('dbCommands', async function() {
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
   });
 
-  describe('getCapabilitiesBasedOnJobId', async function() {
-    it('Should successfully return Capablity Name and Capability Id based on Job Role Id', async function() {
-      const result = await dbCommands.getCapabilitiesBasedOnJobId(jobRoleTestDetails.roleId);
+  describe('getCapabilitiesBasedOnJobName', async function() {
+    it('Should successfully return Capablity Name and Capability Id based on Job Role Name', async function() {
+      const result = await dbCommands.getCapabilitiesBasedOnJobName(jobRoleTestDetails.name);
       expect(result[0].cap_id).equal(capabilityTestDetails.capId);
-      expect(result[0].name).equal(capabilityTestDetails.name);
+      expect(result[0].JobRoleName).equal(capabilityTestDetails.name);
     });
-    it('Should successfully throw Database Error if connection', async function() {
+    it('Should successfully throw Database Error if error occured in database', async function() {
       try{     
-        await dbCommands.getCapabilitiesBasedOnJobId(null);
+        await dbCommands.getCapabilitiesBasedOnJobName(null);
       } catch(e){
         expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobId with message');
+        expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobName with message');
       }
     });
   });
 
 
   describe('getFamilyBasedOnCapability', async function() {
-    it('Should successfully return Family based on Capability ID', async function() {
+    it('Should successfully return Family based on Capability Name', async function() {
       
-    const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.capId);
+    const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.name);
     console.log(result);  
     expect(result[0].Job_Family).equal(capabilityTestDetails.jobFamily);
     expect(result[0].Name).equal(capabilityTestDetails.name);
@@ -86,4 +86,7 @@ describe('dbCommands', async function() {
       }
     });
   });
+
 })
+  
+
