@@ -104,6 +104,8 @@ describe('dbCommands', async function() {
       } catch(e){
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getAllRolesAndBandDB with message');
+      }
+    });
   });
 
   describe('getCapabilitiesBasedOnJobId', async function() {
