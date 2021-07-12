@@ -9,32 +9,33 @@ const dbCommands = require('../../../model/dbCommands');
 
 const DatabaseError = require('../../../errors/DatabaseError');
 
-describe('Capabilities', () => {
-  describe('findByJobName', () => {
+describe('JobsByBand', () => {
+  describe('getRoleAndBandDB', () => {
     it('Should return 200 and correct results if called', () => {
-      const returnedResults = { name: 'fakeJobName' };
-      const getCapabilitiesBasedOnJobNameStub = sinon.stub(dbCommands, 'getCapabilitiesBasedOnJobName');
-      getCapabilitiesBasedOnJobNameStub.returns(returnedResults);
+      const returnedResults = { Role: 'Chief Technical Officer', RoleBand: 'Leadership Community' };
+      const getRoleAndBandDBStub = sinon.stub(dbCommands, 'getRoleAndBandDB');
+      getRoleAndBandDBStub.returns(returnedResults);
       request(app)
-        .get('/capabilities/findByJobName/fakeJobName')
+        .get('/jobs/band/Chief Technical Officer')
         .set('Accept', 'application/json')
         .expect(200)
         .then((response) => {
           expect(response.text).equal(JSON.stringify(returnedResults));
         });
-      getCapabilitiesBasedOnJobNameStub.restore();
+      getRoleAndBandDBStub.restore();
     });
+
     it('Should return 500 if there is a database error', () => {
-      const getCapabilitiesBasedOnJobNameStub = sinon.stub(dbCommands, 'getCapabilitiesBasedOnJobName');
-      getCapabilitiesBasedOnJobNameStub.throws(new DatabaseError());
+      const getRoleAndBandDBStub = sinon.stub(dbCommands, 'getRoleAndBandDB');
+      getRoleAndBandDBStub.throws(new DatabaseError());
       request(app)
-        .get('/capabilities/findByJobName/fakeJob')
+        .get('/jobs/band/Chief Technical Officer')
         .set('Accept', 'application/json')
         .expect(500)
         .then((response) => {
-          expect(response.text).equal('Database Error');
+          expect(response.text).equal('Error');
         });
-      getCapabilitiesBasedOnJobNameStub.restore();
+      getRoleAndBandDBStub.restore();
     });
   });
 });

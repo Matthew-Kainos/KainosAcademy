@@ -12,6 +12,10 @@ app.use('/jobs', jobs);
 app.use('/capabilities', capabilities);
 app.use('/bands', bands);
 
+app.get('/job-roles-spec/:roleID', (req, res) => {
+  res.send('On job roles spec page');
+});
+
 // 404 Path
 app.use((req, res) => {
   res.status(404).json({
