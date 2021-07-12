@@ -48,6 +48,7 @@ exports.testInsertCapability = async (jobId) => {
     }
 }
 
+
 exports.getRoleAndBandDB = async (role) => {
     try{ 
         return await db.query( 
@@ -65,3 +66,15 @@ exports.getAllRolesAndBandDB = async () => {
         throw new DatabaseError(`Error calling getAllRolesAndBandDB with message: ${e.message}`);
     }
 }
+
+exports.getJobSpec = async (Role_ID) => {
+    try{
+        return await db.query(
+            "SELECT Name, Role_ID, Spec_Sum, Spec_Link"
+            + " FROM JobRoles WHERE Role_ID = ?",
+            [Role_ID])
+    }catch(e){
+        throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
+    }
+    
+ }
