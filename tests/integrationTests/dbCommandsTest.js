@@ -52,19 +52,51 @@ describe('dbCommands', async function() {
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
   });
 
-  describe('getCapabilitiesBasedOnJobId', async function() {
-    it('Should successfully return Capablity Name and Capability Id based on Job Role Id', async function() {
-      const result = await dbCommands.getCapabilitiesBasedOnJobId(jobRoleTestDetails.roleId);
-      expect(result[0].cap_id).equal(capabilityTestDetails.capId);
-      expect(result[0].name).equal(capabilityTestDetails.name);
+  describe('checkIfJobExists', async function() {
+    it('Should successfully return job role details if job exists using full name to query', async function() {
+      const result = await dbCommands.checkIfJobExists(jobRoleTestDetails.name);
+      expect(result[0].Name).equal(jobRoleTestDetails.name);
     });
-    it('Should successfully throw Database Error if connection', async function() {
+    it('Should successfully return job role details if job exists using partial name to query', async function() {
+      const result = await dbCommands.checkIfJobExists('%Test%');
+      expect(result[0].Name).equal(jobRoleTestDetails.name);
+    });
+    it('Should successfully return empty result if job name is not valid', async function() {
+      const result = await dbCommands.checkIfJobExists('abc');
+      expect(result.length).equal(0);
+    });
+    it('Should successfully throw Database Error if error occured in database', async function() {
       try{     
-        await dbCommands.getCapabilitiesBasedOnJobId(null);
+        await dbCommands.checkIfJobExists(null);
       } catch(e){
         expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobId with message');
+        expect(e.message).to.include('Error calling checkIfJobExists with message');
       }
+    });
+  });
+
+  describe('getCapabilitiesBasedOnJobName', async function() {
+    it('Should successfully return Capablity Name and Capability Id based on Job Role Name', async function() {
+      const result = await dbCommands.getCapabilitiesBasedOnJobName(jobRoleTestDetails.name);
+      expect(result[0].cap_id).equal(capabilityTestDetails.capId);
+      expect(result[0].JobRoleName).equal(capabilityTestDetails.name);
+    });
+    it('Should successfully throw Database Error if error occured in database', async function() {
+      try{     
+        await dbCommands.getCapabilitiesBasedOnJobName(null);
+      } catch(e){
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getCapabilitiesBasedOnJobName with message');
+      }
+    });
+  });
+
+  describe('getAllJobsWithCapability', async function() {
+    it('Should successfully return all Jobs with Capablity Name and Capability Id', async function() {
+      const result = await dbCommands.getAllJobsWithCapability();
+      expect(result[result.length-1].cap_id).equal(capabilityTestDetails.capId);
+      expect(result[result.length-1].CapabilityName).equal(capabilityTestDetails.name);
+      expect(result[result.length-1].JobRoleName).equal(jobRoleTestDetails.name);
     });
   });
 
