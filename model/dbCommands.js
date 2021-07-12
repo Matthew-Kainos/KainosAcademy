@@ -18,6 +18,7 @@ function wrapDB (dbconfig) {
     } 
 }
 
+
 const db = wrapDB(dbconfig);
 
 exports.getCapabilitiesBasedOnJobName = async (name) => { 
@@ -44,6 +45,25 @@ exports.checkIfJobExists = async (name) => {
             "SELECT * FROM JobRoles WHERE Name LIKE ? LIMIT 10;", name);
         } catch(e) {
         throw new DatabaseError(`Error calling checkIfJobExists with message: ${e.message}`);
+    }
+}
+
+
+exports.getRoleAndBandDB = async (role) => {
+    try{ 
+        return await db.query( 
+            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID AND JobRoles.Name = ?", role);
+    } catch(e) {
+        throw new DatabaseError(`Error calling getRoleAndBandDB with message: ${e.message}`);
+    }
+}
+
+exports.getAllRolesAndBandDB = async () => { 
+    try{
+        return await db.query( 
+            "SELECT JobRoles.Name AS 'Role', Band.Name As 'RoleBand' FROM JobRoles, Band WHERE JobRoles.Band_ID = Band.Band_ID");
+    } catch(e) {
+        throw new DatabaseError(`Error calling getAllRolesAndBandDB with message: ${e.message}`);
     }
 }
 
