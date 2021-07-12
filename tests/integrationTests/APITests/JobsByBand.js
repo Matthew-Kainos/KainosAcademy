@@ -27,13 +27,14 @@ describe('JobsByBand', function() {
     it('Should return 500 if there is a database error', function() {
       const getRoleAndBandDBStub = sinon.stub(dbCommands, "getRoleAndBandDB");
       getRoleAndBandDBStub.throws(new DatabaseError);
-      return request(app)
+      request(app)
         .get('/jobs/band/Chief Technical Officer')
         .set('Accept', 'application/json')
         .expect(500)
         .then(response => {
             expect(response.text).equal('Error');
         });
+        getRoleAndBandDBStub.restore();
     });
   });
 })
