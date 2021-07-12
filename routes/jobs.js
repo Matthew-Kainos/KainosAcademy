@@ -53,10 +53,10 @@ router.get('/getAllJobsWithCapability', async function (req, res) {
     }
 })
 
-router.get('/job-roles-spec/:Role_ID', async function (req, res) {
+router.get('/job-roles-spec/:roleID', async function (req, res) {
     try{
-        const Role_ID = req.params.Role_ID;
-        const dbResults = await dbCommands.getJobSpec(Role_ID); 
+        const roleID = req.params.roleID;
+        const dbResults = await dbCommands.getJobSpec(roleID); 
         res.send(dbResults);
         res.status(200);
     } catch(e){
