@@ -70,24 +70,25 @@ exports.getAllRolesAndBandDB = async () => {
   }
 };
 
-exports.getFamilyBasedOnCapability = async (capName) => { 
-    try{
-    return await db.query( 
-        "SELECT Name, Job_Family FROM Capabilities WHERE Name = ?;", capName);
-    } catch(e) {
-        throw new DatabaseError(`Error calling getFamilyBasedOnCapability with message: ${e.message}`);
-    }
-}
+exports.getFamilyBasedOnCapability = async (capName) => {
+  try {
+    return await db.query(
+      'SELECT Name, Job_Family FROM Capabilities WHERE Name = ?;', capName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getFamilyBasedOnCapability with message: ${e.message}`);
+  }
+};
 
-exports.checkIfCapabilityExists = async (capName) => { 
-    try{
-        return await db.query( 
-            "SELECT * FROM Capabilities WHERE Name = ? LIMIT 10;", capName);
-        } catch(e) {
-            
-        throw new DatabaseError(`Error calling checkIfCapabilityExists with message: ${e.message}`);
-    }
-}
+exports.checkIfCapabilityExists = async (capName) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Capabilities WHERE Name = ? LIMIT 10;', capName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkIfCapabilityExists with message: ${e.message}`);
+  }
+};
 
 exports.getJobSpec = async (roleID) => {
   try {

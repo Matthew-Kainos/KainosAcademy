@@ -148,49 +148,45 @@ describe('dbCommands', async () => {
     });
   });
 
-  describe('getFamilyBasedOnCapability', async function() {
-    it('Should successfully return Family based on Capability Name', async function() {
-      
-    const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.name);
-    console.log(result);  
-    expect(result[0].Job_Family).equal(capabilityTestDetails.jobFamily);
-    expect(result[0].Name).equal(capabilityTestDetails.name);
+  describe('getFamilyBasedOnCapability', async () => {
+    it('Should successfully return Family based on Capability Name', async () => {
+      const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.name);
+      console.log(result);
+      expect(result[0].Job_Family).equal(capabilityTestDetails.jobFamily);
+      expect(result[0].Name).equal(capabilityTestDetails.name);
     });
-    it('Should successfully throw Database Error if connection', async function() {
-      try{     
+    it('Should successfully throw Database Error if connection', async () => {
+      try {
         await dbCommands.getFamilyBasedOnCapability(null);
-      } catch(e){
+      } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getFamilyBasedOnCapability with message');
       }
     });
   });
-
-})
-  describe('getAllJobsWithCapability', async () => {
-    it('Should successfully return all Jobs with Capablity Name and Capability Id', async () => {
-      const result = await dbCommands.getAllJobsWithCapability();
-      expect(result[result.length - 1].cap_id).equal(capabilityTestDetails.capId);
-      expect(result[result.length - 1].CapabilityName).equal(capabilityTestDetails.name);
-      expect(result[result.length - 1].JobRoleName).equal(jobRoleTestDetails.name);
-    });
+});
+describe('getAllJobsWithCapability', async () => {
+  it('Should successfully return all Jobs with Capablity Name and Capability Id', async () => {
+    const result = await dbCommands.getAllJobsWithCapability();
+    expect(result[result.length - 1].cap_id).equal(capabilityTestDetails.capId);
+    expect(result[result.length - 1].CapabilityName).equal(capabilityTestDetails.name);
+    expect(result[result.length - 1].JobRoleName).equal(jobRoleTestDetails.name);
   });
+});
 
-  describe('getJobSpec', async () => {
-    it('Should successfully return the Job Specefication Name, ID, Specification Summary and Specification link based on Job Role Id', async () => {
-      const result = await dbCommands.getJobSpec(jobRoleTestDetails.roleId);
-      expect(result[0].Name).equal(jobRoleTestDetails.name);
-      expect(result[0].Spec_Sum).equal(jobRoleTestDetails.specSum);
-      expect(result[0].Spec_Link).equal(jobRoleTestDetails.specLink);
-    });
-
-    it('Should successfully throw Database Error if connection', async () => {
-      try {
-        await dbCommands.getJobSpec(null);
-      } catch (e) {
-        expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getJobSpec with message');
-      }
-    });
+describe('getJobSpec', async () => {
+  it('Should successfully return the Job Specefication Name, ID, Specification Summary and Specification link based on Job Role Id', async () => {
+    const result = await dbCommands.getJobSpec(jobRoleTestDetails.roleId);
+    expect(result[0].Name).equal(jobRoleTestDetails.name);
+    expect(result[0].Spec_Sum).equal(jobRoleTestDetails.specSum);
+    expect(result[0].Spec_Link).equal(jobRoleTestDetails.specLink);
   });
-
+  it('Should successfully throw Database Error if connection', async () => {
+    try {
+      await dbCommands.getJobSpec(null);
+    } catch (e) {
+      expect(e instanceof DatabaseError).equal(true);
+      expect(e.message).to.include('Error calling getJobSpec with message');
+    }
+  });
+});
