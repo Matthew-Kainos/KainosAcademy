@@ -23,6 +23,7 @@ const db = wrapDB(dbconfig);
 exports.testInsertCapability = async (capabilityTestDetails) => {
   try {
     return await db.query(
+
       'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?, ?)', [
         capabilityTestDetails.capId,
         capabilityTestDetails.name,
