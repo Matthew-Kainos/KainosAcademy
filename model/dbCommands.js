@@ -81,3 +81,4 @@ exports.getJobSpec = async (roleID) => {
     throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
   }
 };
+
