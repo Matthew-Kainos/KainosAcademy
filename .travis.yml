@@ -1,6 +1,8 @@
 language: node_js
 node_js:
  - "14"
+services:
+  - mysql
 script:
  - npm install
  - npm run apiTests
