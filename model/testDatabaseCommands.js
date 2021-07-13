@@ -7,7 +7,7 @@ function wrapDB(dbConfig) {
   const pool = mysql.createPool(dbConfig);
   return {
     query(sql, args) {
-      console.log('in query in wrapper');
+      console.log('Executing Query');
       return util.promisify(pool.query)
         .call(pool, sql, args);
     },
@@ -20,16 +20,41 @@ function wrapDB(dbConfig) {
 
 const db = wrapDB(dbconfig);
 
+exports.testInsertUser = async (userTestDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO Users values (?,?,?)', [
+        userTestDetails.username,
+        userTestDetails.password,
+        userTestDetails.isAdmin,
+      ],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testInsertUser with message: ${e.message}`);
+  }
+};
+
+exports.testDeleteUser = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM Users WHERE Username = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteUser with message: ${e.message}`);
+  }
+};
+
 exports.testInsertCapability = async (capabilityTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?)', [
+      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?, ?)', [
         capabilityTestDetails.capId,
         capabilityTestDetails.name,
         capabilityTestDetails.jobFamily,
         capabilityTestDetails.leadName,
         capabilityTestDetails.leadMessage,
-        capabilityTestDetails.familyId],
+        capabilityTestDetails.familyId,
+        capabilityTestDetails.leadimage],
     );
   } catch (e) {
     throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);

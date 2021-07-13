@@ -7,7 +7,7 @@ function wrapDB(dbConfig) {
   const pool = mysql.createPool(dbConfig);
   return {
     query(sql, args) {
-      console.log('in query in wrapper');
+      console.log('Executing Query');
       return util.promisify(pool.query)
         .call(pool, sql, args);
     },

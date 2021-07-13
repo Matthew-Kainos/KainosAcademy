@@ -4,7 +4,20 @@ const DatabaseError = require('../../errors/DatabaseError');
 const { expect } = chai;
 
 const dbCommands = require('../../model/dbCommands');
+const dbCommandsAdmin = require('../../model/dbCommandsAdmin');
 const testDatabaseCommands = require('../../model/testDatabaseCommands');
+
+const adminUserTestDetails = {
+  username: 'AdminTestUser',
+  password: 'Secret123',
+  isAdmin: true,
+};
+
+const userTestDetails = {
+  username: 'TestUser',
+  password: 'Secret456',
+  isAdmin: 0,
+};
 
 const bandTestDetails = {
   bandId: 9000,
@@ -35,6 +48,7 @@ const capabilityTestDetails = {
   jobFamily: 'TestJobFamily',
   leadName: 'TestLeadName',
   leadMessage: 'TestLeadMessage',
+  leadImage: 'lovelyImage.jpeg',
   familyId: familyTestDetails.familyId,
 };
 
@@ -58,6 +72,8 @@ const additionalJobRoleTestDetails = {
 
 describe('dbCommands', async () => {
   beforeEach(async () => {
+    await testDatabaseCommands.testInsertUser(userTestDetails);
+    await testDatabaseCommands.testInsertUser(adminUserTestDetails);
     await testDatabaseCommands.testInsertFamily(familyTestDetails);
     await testDatabaseCommands.testInsertBand(bandTestDetails);
     await testDatabaseCommands.testInsertBand(additionalBandTestDetails);
@@ -67,6 +83,8 @@ describe('dbCommands', async () => {
   });
 
   afterEach(async () => {
+    await testDatabaseCommands.testDeleteUser(userTestDetails.username);
+    await testDatabaseCommands.testDeleteUser(adminUserTestDetails.username);
     await testDatabaseCommands.testDeleteJobRole(additionalJobRoleTestDetails.name);
     await testDatabaseCommands.testDeleteJobRole(jobRoleTestDetails.name);
     await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
@@ -171,6 +189,64 @@ describe('dbCommands', async () => {
       } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getJobSpec with message');
+      }
+    });
+  });
+
+  describe('checkIfUserExists', async () => {
+    it('Should successfully return the Username if User exists', async () => {
+      const result = await dbCommandsAdmin.checkIfUserExists(userTestDetails.username);
+      expect(result.length).equal(1);
+      expect(result[0].Username).equal(userTestDetails.username);
+    });
+
+    it('Should successfully throw Database Error if db error occured', async () => {
+      try {
+        await dbCommandsAdmin.checkIfUserExists(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling checkIfUserExists with message');
+      }
+    });
+  });
+
+  describe('getUsersPassword', async () => {
+    it('Should successfully return the Password of User', async () => {
+      const result = await dbCommandsAdmin.getUsersPassword(userTestDetails.username);
+      expect(result.length).equal(1);
+      expect(result[0].Password).equal(userTestDetails.password);
+    });
+
+    it('Should successfully throw Database Error if db error occured', async () => {
+      try {
+        await dbCommandsAdmin.getUsersPassword(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getUsersPassword with message');
+      }
+    });
+  });
+  describe('checkIfAdmin', async () => {
+    it('Should successfully return details if user an admin', async () => {
+      const result = await dbCommandsAdmin.checkIfAdmin(adminUserTestDetails.username);
+      expect(result.length).equal(1);
+      expect(result[0].Username).equal(adminUserTestDetails.username);
+      expect(result[0].Password).equal(adminUserTestDetails.password);
+      expect(result[0].isAdmin).equal(1);
+    });
+
+    it('Should successfully return no results if user an is not an admin', async () => {
+      const result = await dbCommandsAdmin.checkIfAdmin(userTestDetails.username);
+      console.log(result);
+      expect(result.length).equal(0);
+    });
+
+    it('Should successfully throw Database Error if db error occured', async () => {
+      try {
+        await dbCommandsAdmin.checkIfAdmin(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getUsersPassword with message');
       }
     });
   });
