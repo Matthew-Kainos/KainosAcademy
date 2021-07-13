@@ -1,7 +1,15 @@
 const mysql = require('mysql');
 const util = require('util');
-const dbconfig = require('../dbconfig.json');
 const DatabaseError = require('../errors/DatabaseError');
+require('dotenv').config();
+
+const dbconfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  connectionLimit: process.env.DB_CON_LIMIT,
+  database: process.env.DB_DATABASE,
+};
 
 function wrapDB(dbConfig) {
   const pool = mysql.createPool(dbConfig);
@@ -23,13 +31,15 @@ const db = wrapDB(dbconfig);
 exports.testInsertCapability = async (capabilityTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?)', [
+
+      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?, ?)', [
         capabilityTestDetails.capId,
         capabilityTestDetails.name,
         capabilityTestDetails.jobFamily,
         capabilityTestDetails.leadName,
         capabilityTestDetails.leadMessage,
-        capabilityTestDetails.familyId],
+        capabilityTestDetails.familyId,
+        capabilityTestDetails.leadImage],
     );
   } catch (e) {
     throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
