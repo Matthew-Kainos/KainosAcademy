@@ -5,12 +5,12 @@ const DatabaseError = require('../errors/DatabaseError');
 require('dotenv').config();
 
 const dbconfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    connectionLimit: process.env.DB_CON_LIMIT, 
-    database: process.env.DB_DATABASE
-}
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  connectionLimit: process.env.DB_CON_LIMIT,
+  database: process.env.DB_DATABASE,
+};
 
 function wrapDB(dbConfig) {
   console.log(dbconfig);
