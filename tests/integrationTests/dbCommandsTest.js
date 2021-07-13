@@ -94,10 +94,14 @@ describe('dbCommands', async () => {
   describe('getAllRolesAndBandDB', async () => {
     it('Should successfully return role name and role band by the enter role name', async () => {
       const result = await dbCommands.getAllRolesAndBandDB(jobRoleTestDetails.name);
-      expect(result.find(x => x.Role == jobRoleTestDetails.name).Role).equal(jobRoleTestDetails.name);
-      expect(result.find(x => x.Role == jobRoleTestDetails.name).RoleBand).equal(bandTestDetails.name);
-      expect(result.find(x => x.Role == additionalJobRoleTestDetails.name).Role).equal(additionalJobRoleTestDetails.name);
-      expect(result.find(x => x.Role == additionalJobRoleTestDetails.name).RoleBand).equal(additionalBandTestDetails.name);
+      expect(result.find((x) => x.Role === jobRoleTestDetails.name).Role)
+        .equal(jobRoleTestDetails.name);
+      expect(result.find((x) => x.Role === jobRoleTestDetails.name).RoleBand)
+        .equal(bandTestDetails.name);
+      expect(result.find((x) => x.Role === additionalJobRoleTestDetails.name).Role)
+        .equal(additionalJobRoleTestDetails.name);
+      expect(result.find((x) => x.Role === additionalJobRoleTestDetails.name).RoleBand)
+        .equal(additionalBandTestDetails.name);
     });
     it('Should successfully throw Database Error if connection', async () => {
       try {
@@ -132,23 +136,23 @@ describe('dbCommands', async () => {
     });
   });
 
-  describe('getJobRoles', async function() {
-    it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async function() {
+  describe('getJobRoles', async () => {
+    it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async () => {
       const result = await dbCommands.getJobRoles();
-      console.log(result)
-      expect(result[result.length-1].Role_ID).equal(jobRoleTestDetails.roleId);
-      expect(result[result.length-1].Name).equal(jobRoleTestDetails.name);
+      console.log(result);
+      expect(result[result.length - 1].Role_ID).equal(jobRoleTestDetails.roleId);
+      expect(result[result.length - 1].Name).equal(jobRoleTestDetails.name);
     });
-    it('Should successfully throw Database Error if connection', async function() {
-      try{     
+    it('Should successfully throw Database Error if connection', async () => {
+      try {
         await dbCommands.getJobRoles(null);
-        } catch(e){
+      } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getJobRoles with message');
       }
-    })
     });
-    
+  });
+
   describe('getCapabilitiesBasedOnJobName', async () => {
     it('Should successfully return Capablity Name and Capability Id based on Job Role Name', async () => {
       const result = await dbCommands.getCapabilitiesBasedOnJobName(jobRoleTestDetails.name);

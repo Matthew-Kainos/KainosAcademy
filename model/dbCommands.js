@@ -20,23 +20,25 @@ function wrapDB(dbConfig) {
 
 const db = wrapDB(dbconfig);
 
-exports.getJobRoles = async () => { 
-    try{
-        return await db.query( 
-            "SELECT Role_ID, JobRoles.Name, Level FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level");
-    } catch(e) {
-        throw new DatabaseError(`Error calling getJobRoles with message: ${e.message}`);
-    }
-}
+exports.getJobRoles = async () => {
+  try {
+    return await db.query(
+      'SELECT Role_ID, JobRoles.Name, Level FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getJobRoles with message: ${e.message}`);
+  }
+};
 
-exports.getCapabilitiesBasedOnJobId = async (jobId) => { 
-    try{
-        return await db.query( 
-            "SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.role_id = ? LIMIT 1;", jobId);
-    } catch(e) {
-        throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
-    }
-}
+exports.getCapabilitiesBasedOnJobId = async (jobId) => {
+  try {
+    return await db.query(
+      'SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.role_id = ? LIMIT 1;', jobId,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
+  }
+};
 exports.getCapabilitiesBasedOnJobName = async (name) => {
   try {
     return await db.query(
