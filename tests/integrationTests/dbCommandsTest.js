@@ -141,8 +141,10 @@ describe('dbCommands', async () => {
     it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async () => {
       const result = await dbCommands.getJobRoles();
       console.log(result);
-      expect(result[result.length - 1].Role_ID).equal(jobRoleTestDetails.roleId);
-      expect(result[result.length - 1].Name).equal(jobRoleTestDetails.name);
+      expect(result.find((x) => x.Role_ID === jobRoleTestDetails.roleId).Role_ID)
+        .equal(jobRoleTestDetails.roleId);
+      expect(result.find((x) => x.Name === jobRoleTestDetails.name).Name)
+        .equal(jobRoleTestDetails.name);
     });
     it('Should successfully throw Database Error if connection', async () => {
       try {
