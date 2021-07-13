@@ -22,6 +22,7 @@
   "homepage": "https://github.com/Matthew-Kainos/KainosAcademy#readme",
   "dependencies": {
     "chai": "^4.3.4",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mocha": "^9.0.2",
     "mysql": "^2.18.1",
