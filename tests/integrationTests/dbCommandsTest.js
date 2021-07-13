@@ -16,7 +16,7 @@ const adminUserTestDetails = {
 const userTestDetails = {
   username: 'TestUser',
   password: 'Secret456',
-  isAdmin: 0,
+  isAdmin: false,
 };
 
 const bandTestDetails = {
