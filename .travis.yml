@@ -2,10 +2,9 @@ language: node_js
 node_js:
  - "14"
 services:
-  - mysql
+ - mysql
 script:
- - npm install
- - npm run apiTests
+ - mocha tests/integrationTests --exit
 notifications: 
   email: 
     recipients: 

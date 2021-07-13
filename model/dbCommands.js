@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 const util = require('util');
-//const dbconfig = require('../dbconfig.json');
+// const dbconfig = require('../dbconfig.json');
 const DatabaseError = require('../errors/DatabaseError');
 require('dotenv').config();
 
