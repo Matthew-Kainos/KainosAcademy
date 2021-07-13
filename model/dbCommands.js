@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const util = require('util');
-// const dbconfig = require('../dbconfig.json');
 const DatabaseError = require('../errors/DatabaseError');
+
 require('dotenv').config();
 
 const dbconfig = {
@@ -13,7 +13,6 @@ const dbconfig = {
 };
 
 function wrapDB(dbConfig) {
-  console.log(dbconfig);
   const pool = mysql.createPool(dbConfig);
   return {
     query(sql, args) {
