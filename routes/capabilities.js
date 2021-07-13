@@ -1,5 +1,4 @@
 const express = require('express');
-
 const router = express.Router();
 const dbCommands = require('../model/dbCommands');
 const DatabaseError = require('../errors/DatabaseError');

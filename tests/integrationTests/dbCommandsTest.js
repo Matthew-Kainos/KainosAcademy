@@ -36,6 +36,7 @@ const capabilityTestDetails = {
   leadName: 'TestLeadName',
   leadMessage: 'TestLeadMessage',
   familyId: familyTestDetails.familyId,
+  leadImage: 'TestImagePath',
 };
 
 const jobRoleTestDetails = {
@@ -94,10 +95,10 @@ describe('dbCommands', async () => {
   describe('getAllRolesAndBandDB', async () => {
     it('Should successfully return role name and role band by the enter role name', async () => {
       const result = await dbCommands.getAllRolesAndBandDB(jobRoleTestDetails.name);
-      expect(result[0].Role).equal(jobRoleTestDetails.name);
-      expect(result[0].RoleBand).equal(bandTestDetails.name);
-      expect(result[1].Role).equal(additionalJobRoleTestDetails.name);
-      expect(result[1].RoleBand).equal(additionalBandTestDetails.name);
+      expect(result.find(x => x.Role == jobRoleTestDetails.name).Role).equal(jobRoleTestDetails.name);
+      expect(result.find(x => x.Role == jobRoleTestDetails.name).RoleBand).equal(bandTestDetails.name);
+      expect(result.find(x => x.Role == additionalJobRoleTestDetails.name).Role).equal(additionalJobRoleTestDetails.name);
+      expect(result.find(x => x.Role == additionalJobRoleTestDetails.name).RoleBand).equal(additionalBandTestDetails.name);
     });
     it('Should successfully throw Database Error if connection', async () => {
       try {
