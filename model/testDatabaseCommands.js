@@ -31,13 +31,15 @@ const db = wrapDB(dbconfig);
 exports.testInsertCapability = async (capabilityTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?)', [
+
+      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?, ?)', [
         capabilityTestDetails.capId,
         capabilityTestDetails.name,
         capabilityTestDetails.jobFamily,
         capabilityTestDetails.leadName,
         capabilityTestDetails.leadMessage,
-        capabilityTestDetails.familyId],
+        capabilityTestDetails.familyId,
+        capabilityTestDetails.leadImage],
     );
   } catch (e) {
     throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);

@@ -36,6 +36,7 @@ const capabilityTestDetails = {
   leadName: 'TestLeadName',
   leadMessage: 'TestLeadMessage',
   familyId: familyTestDetails.familyId,
+  leadImage: 'TestImagePath',
 };
 
 const jobRoleTestDetails = {
