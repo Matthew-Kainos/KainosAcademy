@@ -27,7 +27,6 @@ router.get('/findByJobName/:jobName', async (req, res) => {
     const results = await dbCommands.getCapabilitiesBasedOnJobName(`%${name}%`);
     res.send(results);
     res.status(200);
-    res.send('Hello');
   } catch (e) {
     res.status(500);
     if (e instanceof DatabaseError) {
