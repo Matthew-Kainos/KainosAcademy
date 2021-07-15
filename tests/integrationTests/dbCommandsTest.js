@@ -153,6 +153,22 @@ describe('dbCommands', async () => {
     });
   });
 
+  describe('getFamilyBasedOnCapability', async () => {
+    it('Should successfully return Family based on Capability Name', async () => {
+      const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.name);
+      expect(result[0].Job_Family).equal(capabilityTestDetails.jobFamily);
+      expect(result[0].Name).equal(capabilityTestDetails.name);
+    });
+    it('Should successfully throw Database Error if connection', async () => {
+      try {
+        await dbCommands.getFamilyBasedOnCapability(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getFamilyBasedOnCapability with message');
+      }
+    });
+  });
+
   describe('getAllJobsWithCapability', async () => {
     it('Should successfully return all Jobs with Capablity Name and Capability Id', async () => {
       const result = await dbCommands.getAllJobsWithCapability();
@@ -169,7 +185,6 @@ describe('dbCommands', async () => {
       expect(result[0].Spec_Sum).equal(jobRoleTestDetails.specSum);
       expect(result[0].Spec_Link).equal(jobRoleTestDetails.specLink);
     });
-
     it('Should successfully throw Database Error if connection', async () => {
       try {
         await dbCommands.getJobSpec(null);
@@ -177,6 +192,13 @@ describe('dbCommands', async () => {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getJobSpec with message');
       }
+    });
+  });
+  describe('getAllFamiliesWithCapability', async () => {
+    it('Should successfully return all families with the relevant Cabability Name', async () => {
+      const result = await dbCommands.getAllFamiliesWithCapability();
+      expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
+      expect(result[result.length - 1].Job_Family).equal(capabilityTestDetails.jobFamily);
     });
   });
 });
