@@ -52,7 +52,7 @@ exports.getAllJobsWithCapability = async () => {
 exports.checkIfJobExists = async (name) => {
   try {
     return await db.query(
-      'SELECT * FROM JobRoles WHERE Name LIKE ? LIMIT 10;', name,
+      'SELECT * FROM JobRoles WHERE Name = ?', name,
     );
   } catch (e) {
     throw new DatabaseError(`Error calling checkIfJobExists with message: ${e.message}`);

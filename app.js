@@ -4,6 +4,8 @@ const app = express();
 const jobs = require('./routes/jobs');
 const capabilities = require('./routes/capabilities');
 const bands = require('./routes/bands');
+const login = require('./routes/login');
+const add = require('./routes/add');
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -11,10 +13,8 @@ app.use(express.urlencoded());
 app.use('/jobs', jobs);
 app.use('/capabilities', capabilities);
 app.use('/bands', bands);
-
-app.get('/job-roles-spec/:roleID', (req, res) => {
-  res.send('On job roles spec page');
-});
+app.use('/login', login);
+app.use('/add', add);
 
 // 404 Path
 app.use((req, res) => {
