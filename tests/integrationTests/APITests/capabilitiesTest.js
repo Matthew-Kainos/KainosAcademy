@@ -68,3 +68,60 @@ describe('Capabilities', () => {
     });
   });
 });
+
+describe('Capabilities', () => {
+  describe('checkIfCapabilityExists', () => {
+    it('Should return 200 and correct results if called', () => {
+      const returnedResults = { CapabilityName: 'fakeCapName', FamilyName: 'FakeFamilyName' };
+      const checkIfCapabilityExistsStub = sinon.stub(dbCommands, 'checkIfCapabilityExists');
+      checkIfCapabilityExistsStub.returns(returnedResults);
+      request(app)
+        .get('/checkIfCapabilityExists/fakeCapName')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then((response) => {
+          expect(response.text).equal(JSON.stringify(returnedResults));
+        });
+      checkIfCapabilityExistsStub.restore();
+    });
+    it('Should return 500 if there is a database error', () => {
+      const checkIfCapabilityExistsStub = sinon.stub(dbCommands, 'checkIfCapabilityExists');
+      checkIfCapabilityExistsStub.throws(new DatabaseError());
+      request(app)
+        .get('/capabilities/getAllFamiliesWithCapability')
+        .set('Accept', 'application/json')
+        .expect(500)
+        .then((response) => {
+          expect(response.text).equal('Database Error');
+        });
+      checkIfCapabilityExistsStub.restore();
+    });
+  });
+  describe('getAllFamiliesWithCapability', () => {
+    it('Should return 200 and correct results if called', () => {
+      const returnedResults = { CapabilityName: 'fakeCapName', FamilyName: 'FakeFamilyName' };
+      const getAllFamiliesWithCapabilityStub = sinon.stub(dbCommands, 'getAllFamiliesWithCapability');
+      getAllFamiliesWithCapabilityStub.returns(returnedResults);
+      request(app)
+        .get('/capabilities/getAllFamiliesWithCapability')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then((response) => {
+          expect(response.text).equal(JSON.stringify(returnedResults));
+        });
+      getAllFamiliesWithCapabilityStub.restore();
+    });
+    it('Should return 500 if there is a database error', () => {
+      const getAllFamiliesWithCapabilityStub = sinon.stub(dbCommands, 'getAllFamiliesWithCapability');
+      getAllFamiliesWithCapabilityStub.throws(new DatabaseError());
+      request(app)
+        .get('/capabilities/getAllFamiliesWithCapability')
+        .set('Accept', 'application/json')
+        .expect(500)
+        .then((response) => {
+          expect(response.text).equal('Database Error');
+        });
+      getAllFamiliesWithCapabilityStub.restore();
+    });
+  });
+});

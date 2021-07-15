@@ -195,4 +195,11 @@ describe('dbCommands', async () => {
       }
     });
   });
+  describe('getAllFamiliesWithCapability', async () => {
+    it('Should successfully return all families with the relevant Cabability Name', async () => {
+      const result = await dbCommands.getAllFamiliesWithCapability();
+      expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
+      expect(result[result.length - 1].Job_Family).equal(capabilityTestDetails.jobFamily);
+    });
+  });
 });

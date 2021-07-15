@@ -111,3 +111,13 @@ exports.getJobSpec = async (roleID) => {
     throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
   }
 };
+
+exports.getAllFamiliesWithCapability = async () => {
+  try {
+    return await db.query(
+      'SELECT Name, Job_Family FROM Capabilities',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
+  }
+};
