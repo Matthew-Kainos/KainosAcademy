@@ -32,7 +32,7 @@ const db = wrapDB(dbconfig);
 exports.getJobRoles = async () => {
   try {
     return await db.query(
-      'SELECT Role_ID, JobRoles.Name, Level FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level',
+      'SELECT JobRoles.Role_ID, JobRoles.name, Band.Level, Band.Name FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getJobRoles with message: ${e.message}`);
