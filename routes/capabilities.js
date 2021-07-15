@@ -8,7 +8,6 @@ router.get('/family/:capName', async (req, res) => {
   try {
     const { capName } = req.params;
     const results = await dbCommands.getFamilyBasedOnCapability(capName);
-    console.log(results);
     res.send(results);
     res.status(200);
   } catch (e) {

@@ -156,7 +156,6 @@ describe('dbCommands', async () => {
   describe('getFamilyBasedOnCapability', async () => {
     it('Should successfully return Family based on Capability Name', async () => {
       const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.name);
-      console.log(result);
       expect(result[0].Job_Family).equal(capabilityTestDetails.jobFamily);
       expect(result[0].Name).equal(capabilityTestDetails.name);
     });

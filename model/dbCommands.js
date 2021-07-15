@@ -13,11 +13,9 @@ const dbconfig = {
 };
 
 function wrapDB(dbConfig) {
-  console.log(dbConfig);
   const pool = mysql.createPool(dbConfig);
   return {
     query(sql, args) {
-      console.log('in query in wrapper');
       return util.promisify(pool.query)
         .call(pool, sql, args);
     },
