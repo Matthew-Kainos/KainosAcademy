@@ -57,7 +57,7 @@ const additionalJobRoleTestDetails = {
   bandId: additionalBandTestDetails.bandId,
 };
 
-describe.only('dbCommandsAdmin', async () => {
+describe('dbCommandsAdmin', async () => {
   beforeEach(async () => {
     await testDatabaseCommands.testInsertFamily(familyTestDetails);
     await testDatabaseCommands.testInsertBand(bandTestDetails);

@@ -21,7 +21,7 @@ router.post('/role', async (req, res) => {
         bandId: bandId[0].BandID,
       };
       await dbCommandsAdmin.addNewRole(newRole);
-      res.send({ success: true, message: 'New Role Added' });
+      res.send({ success: true, message: `New Role ${newRoleDetails.RoleName} Added` });
       res.status(200);
     } else {
       res.send({ success: false, message: 'Unable to add Role due to Duplicate Role Name' });
