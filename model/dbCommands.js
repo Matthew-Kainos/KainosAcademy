@@ -16,7 +16,6 @@ function wrapDB(dbConfig) {
   const pool = mysql.createPool(dbConfig);
   return {
     query(sql, args) {
-      console.log('in query in wrapper');
       return util.promisify(pool.query)
         .call(pool, sql, args);
     },
@@ -79,6 +78,26 @@ exports.getAllRolesAndBandDB = async () => {
   }
 };
 
+exports.getFamilyBasedOnCapability = async (capName) => {
+  try {
+    return await db.query(
+      'SELECT Name, Job_Family FROM Capabilities WHERE Name = ?;', capName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getFamilyBasedOnCapability with message: ${e.message}`);
+  }
+};
+
+exports.checkIfCapabilityExists = async (capName) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Capabilities WHERE Name = ? LIMIT 10;', capName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkIfCapabilityExists with message: ${e.message}`);
+  }
+};
+
 exports.getJobSpec = async (roleID) => {
   try {
     return await db.query(
@@ -88,5 +107,15 @@ exports.getJobSpec = async (roleID) => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
+  }
+};
+
+exports.getAllFamiliesWithCapability = async () => {
+  try {
+    return await db.query(
+      'SELECT Name, Job_Family FROM Capabilities',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
   }
 };

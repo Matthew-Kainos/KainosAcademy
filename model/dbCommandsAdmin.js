@@ -72,7 +72,7 @@ exports.getAllBandNames = async () => {
 exports.getAllCapabilityNames = async () => {
   try {
     return await db.query(
-      'SELECT Name FROM Capabilities',
+      'SELECT Name FROM Capabilities ORDER BY Name',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getUsersPassword with message: ${e.message}`);
