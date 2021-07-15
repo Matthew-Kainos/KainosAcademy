@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 const mysql = require('mysql');
 const util = require('util');
 const DatabaseError = require('../errors/DatabaseError');
