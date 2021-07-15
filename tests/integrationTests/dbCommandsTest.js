@@ -266,7 +266,7 @@ describe('dbCommands', async () => {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling getUsersPassword with message');
       }
-     });
+    });
   });
 
   describe('getAllFamiliesWithCapability', async () => {
