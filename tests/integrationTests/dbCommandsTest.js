@@ -210,7 +210,7 @@ describe('dbCommands', async () => {
       const result = await dbCommands.getAllJobsWithCapability();
       expect(result[result.length - 1].cap_id).equal(capabilityTestDetails.capId);
       expect(result[result.length - 1].CapabilityName).equal(capabilityTestDetails.name);
-      expect(result[result.length - 1].JobRoleName).equal(jobRoleTestDetails.name);
+      expect(result[result.length - 1].JobRoleName).equal(additionalJobRoleTestDetails.name);
     });
   });
 
