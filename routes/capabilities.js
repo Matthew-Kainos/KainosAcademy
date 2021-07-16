@@ -2,7 +2,23 @@ const express = require('express');
 
 const router = express.Router();
 const dbCommands = require('../model/dbCommands');
+const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 const DatabaseError = require('../errors/DatabaseError');
+
+router.get('/getAllCapabilityNames', async (req, res) => {
+  try {
+    const results = await dbCommandsAdmin.getAllCapabilityNames();
+    res.send(results);
+    res.status(200);
+  } catch (e) {
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+});
 
 router.get('/family/:capName', async (req, res) => {
   try {
@@ -12,6 +28,7 @@ router.get('/family/:capName', async (req, res) => {
     res.status(200);
   } catch (e) {
     res.status(500);
+    res.send('Error');
     if (e instanceof DatabaseError) {
       res.send('Database Error');
       console.error(e.message);

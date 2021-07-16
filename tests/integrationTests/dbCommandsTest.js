@@ -134,10 +134,6 @@ describe('dbCommands', async () => {
       const result = await dbCommands.checkIfJobExists(jobRoleTestDetails.name);
       expect(result[0].Name).equal(jobRoleTestDetails.name);
     });
-    it('Should successfully return job role details if job exists using partial name to query', async () => {
-      const result = await dbCommands.checkIfJobExists('%Test%');
-      expect(result[0].Name).equal(jobRoleTestDetails.name);
-    });
     it('Should successfully return empty result if job name is not valid', async () => {
       const result = await dbCommands.checkIfJobExists('abc');
       expect(result.length).equal(0);
