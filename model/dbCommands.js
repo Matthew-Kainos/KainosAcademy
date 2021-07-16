@@ -116,6 +116,27 @@ exports.getAllFamiliesWithCapability = async () => {
       'SELECT Name, Job_Family FROM Capabilities',
     );
   } catch (e) {
+    throw new DatabaseError(`Error calling getAllFamiliesWithCapability with message: ${e.message}`);
+  }
+};
+
+// MY CODE
+exports.getCompentenciesBasesOnBand = async (bandName) => {
+  try {
+    return await db.query(
+      'SELECT Name, Competencies FROM Band WHERE Name = ?;', bandName,
+    );
+  } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
+  }
+};
+// MY CODE
+exports.checkIfBandExists = async (bandName) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Band WHERE Name = ? LIMIT 10;', bandName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkIfBandExists with message: ${e.message}`);
   }
 };
