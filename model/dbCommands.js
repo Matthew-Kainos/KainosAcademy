@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const util = require('util');
 const DatabaseError = require('../errors/DatabaseError');
 
+// eslint-disable-next-line import/no-unresolved
 require('dotenv').config();
 
 const dbconfig = {
@@ -27,6 +28,16 @@ function wrapDB(dbConfig) {
 }
 
 const db = wrapDB(dbconfig);
+
+exports.getCapabilityLead = async (capID) => {
+  try {
+    return await db.query(
+      'SELECT Cap_ID, Name, Job_Family, LeadName, LeadMessage, LeadImage FROM Capabilities WHERE Cap_ID=?;', capID,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getCapabilityLead with message: ${e.message}`);
+  }
+};
 
 exports.getCapabilitiesBasedOnJobName = async (name) => {
   try {

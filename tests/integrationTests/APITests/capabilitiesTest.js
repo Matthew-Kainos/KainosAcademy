@@ -124,4 +124,32 @@ describe('Capabilities', () => {
       getAllFamiliesWithCapabilityStub.restore();
     });
   });
+
+  describe('viewCapabilityLead', () => {
+    it('Should return 200 and correct results if called', () => {
+      const returnedResults = { capID: '1' };
+      const getCapabilityLeadStub = sinon.stub(dbCommands, 'getCapabilityLead');
+      getCapabilityLeadStub.returns(returnedResults);
+      request(app)
+        .get('capabilites/viewCapabilityLead/1')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .then((response) => {
+          expect(response.text).equal(JSON.stringify(returnedResults));
+        });
+      getCapabilityLeadStub.restore();
+    });
+    it('Should return 500 if there is a database error', () => {
+      const getCapabilityLeadStub = sinon.stub(dbCommands, 'getCapabilityLead');
+      getCapabilityLeadStub.throws(new DatabaseError());
+      request(app)
+        .get('/capabilities/viewCapabilityLead/1')
+        .set('Accept', 'application/json')
+        .expect(500)
+        .then((response) => {
+          expect(response.text).equal('Database Error');
+        });
+      getCapabilityLeadStub.restore();
+    });
+  });
 });
