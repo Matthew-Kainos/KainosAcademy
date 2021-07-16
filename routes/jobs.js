@@ -86,7 +86,7 @@ router.get('/getAllJobsWithCapability', async (req, res) => {
   }
 });
 
-router.get('/job-roles-spec/:roleID', async (req, res) => {
+router.get('/jobSpec/:roleID', async (req, res) => {
   try {
     const { roleID } = req.params;
     const dbResults = await dbCommands.getJobSpec(roleID);

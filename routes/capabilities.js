@@ -87,4 +87,18 @@ router.get('/getAllFamiliesWithCapability', async (req, res) => {
   }
 });
 
+router.get('/viewCapabilityLead/:capID', async (req, res) => {
+  try {
+    const { capID } = req.params;
+    const results = await dbCommands.getCapabilityLead(capID);
+    console.log(results);
+    res.send(results);
+    res.status(200);
+  } catch (e) {
+    res.status(500);
+    res.send('Error');
+    console.error(e.message);
+  }
+});
+
 module.exports = router;
