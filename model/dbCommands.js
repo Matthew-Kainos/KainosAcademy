@@ -29,6 +29,25 @@ function wrapDB(dbConfig) {
 
 const db = wrapDB(dbconfig);
 
+exports.getJobRoles = async () => {
+  try {
+    return await db.query(
+      'SELECT JobRoles.Role_ID, JobRoles.name, Band.Level, Band.Name FROM JobRoles INNER JOIN Band ON JobRoles.Band_ID = Band.Band_ID ORDER BY Level',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getJobRoles with message: ${e.message}`);
+  }
+};
+
+exports.getCapabilitiesBasedOnJobId = async (jobId) => {
+  try {
+    return await db.query(
+      'SELECT Capabilities.cap_id, Capabilities.name FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id WHERE JobRoles.role_id = ? LIMIT 1;', jobId,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
+  }
+};
 exports.getCapabilityLead = async (capID) => {
   try {
     return await db.query(
@@ -128,5 +147,29 @@ exports.getAllFamiliesWithCapability = async () => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
+  }
+};
+
+exports.addJobFamily = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Name)'
+            + ' VALUES (?)',
+      [data.Name],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling addJobFamily with message: ${e.message}`);
+  }
+};
+
+exports.deleteJobFamily = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Family_ID, Name)'
+            + ' VALUES (?, ?)',
+      [data.Name],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
   }
 };

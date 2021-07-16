@@ -152,6 +152,25 @@ describe('dbCommands', async () => {
     });
   });
 
+  describe('getJobRoles', async () => {
+    it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async () => {
+      const result = await dbCommands.getJobRoles();
+      console.log(result);
+      expect(result.find((x) => x.Role_ID === jobRoleTestDetails.roleId).Role_ID)
+        .equal(jobRoleTestDetails.roleId);
+      expect(result.find((x) => x.Name === jobRoleTestDetails.name).Name)
+        .equal(jobRoleTestDetails.name);
+    });
+    it('Should successfully throw Database Error if connection', async () => {
+      try {
+        await dbCommands.getJobRoles(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getJobRoles with message');
+      }
+    });
+  });
+
   describe('getCapabilitiesBasedOnJobName', async () => {
     it('Should successfully return Capablity Name and Capability Id based on Job Role Name', async () => {
       const result = await dbCommands.getCapabilitiesBasedOnJobName(jobRoleTestDetails.name);
