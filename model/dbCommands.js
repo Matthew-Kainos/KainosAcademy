@@ -138,3 +138,27 @@ exports.getAllFamiliesWithCapability = async () => {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
   }
 };
+
+exports.addJobFamily = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Name)'
+            + ' VALUES (?)',
+      [data.Name],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling addJobFamily with message: ${e.message}`);
+  }
+};
+
+exports.deleteJobFamily = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Family_ID, Name)'
+            + ' VALUES (?, ?)',
+      [data.Name],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
+  }
+};
