@@ -119,3 +119,27 @@ exports.getAllFamiliesWithCapability = async () => {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
   }
 };
+
+exports.addBand = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Band(Name, Level, Training, Competencies, Responsibilities)'
+            + ' VALUES (?, ?, ?, ?, ?)',
+      [data.Name, data.Level, data.Training, data.Competencies, data.Responsibilities],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
+  }
+};
+
+exports.updateBandLevels = async (data) => {
+  try {
+    return await db.query(
+      'UPDATE Band SET Level=Level-1 WHERE Level >= 1 ORDER BY Level DESC;'
+            + ' VALUES (?, ?, ?, ?, ?)',
+      [data.Name, data.Level, data.Training, data.Competencies, data.Responsibilities],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getJobSpec with message: ${e.message}`);
+  }
+};

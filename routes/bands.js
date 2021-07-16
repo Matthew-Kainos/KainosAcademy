@@ -7,7 +7,14 @@ const router = express.Router();
 
 router.get('/addBand', (req, res) => {
   try {
-    console.log(req.body);
+    const { BandData } = req.params;
+    const results = await dbCommands.checkIfJobIdExists(jobID);
+    res.status(200);
+    if (results.length > 0) {
+      res.send(JSON.stringify(true));
+    } else {
+      res.send(JSON.stringify(false));
+    }
   } catch (e) {
     res.status(500);
     res.send('Error');
