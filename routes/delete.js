@@ -5,7 +5,7 @@ const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 
 const DatabaseError = require('../errors/DatabaseError');
 
-router.post('/role', async (req, res) => {
+router.delete('/role', async (req, res) => {
   try {
     const { RoleName } = req.body;
     await dbCommandsAdmin.deleteARole(RoleName);

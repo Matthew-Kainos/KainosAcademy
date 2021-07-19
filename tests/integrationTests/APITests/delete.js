@@ -15,7 +15,7 @@ describe('Delete', () => {
       const RoleName = 'FakeRole';
       const deleteARoleStub = sinon.stub(dbCommandsAdmin, 'deleteARole');
       await request(app)
-        .post('/delete/role')
+        .delete('/delete/role')
         .set('Accept', 'application/json')
         .expect(200)
         .send({ RoleName })
@@ -30,7 +30,7 @@ describe('Delete', () => {
       const deleteARoleStub = sinon.stub(dbCommandsAdmin, 'deleteARole');
       deleteARoleStub.throws(new DatabaseError());
       request(app)
-        .post('/delete/role')
+        .delete('/delete/role')
         .set('Accept', 'application/json')
         .send({ roleName })
         .expect(500)
