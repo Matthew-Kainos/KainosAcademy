@@ -12,16 +12,16 @@ const DatabaseError = require('../../../errors/DatabaseError');
 describe('Delete', () => {
   describe('role', () => {
     it('Should return 200 with success message if role deleted', async () => {
-      const roleName = 'FakeRole';
+      const RoleName = 'FakeRole';
       const deleteARoleStub = sinon.stub(dbCommandsAdmin, 'deleteARole');
       await request(app)
         .post('/delete/role')
         .set('Accept', 'application/json')
         .expect(200)
-        .send({ roleName })
+        .send({ RoleName })
         .then((response) => {
           expect(response.body.success).to.equal(true);
-          expect(response.body.message).to.equal(`${roleName} Successfully Deleted`);
+          expect(response.body.message).to.equal(`${RoleName} Successfully Deleted`);
         });
       deleteARoleStub.restore();
     });
