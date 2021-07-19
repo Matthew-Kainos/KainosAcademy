@@ -151,7 +151,6 @@ describe('dbCommands', async () => {
   describe('getJobRoles', async () => {
     it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async () => {
       const result = await dbCommands.getJobRoles();
-      console.log(result);
       expect(result.find((x) => x.Role_ID === jobRoleTestDetails.roleId).Role_ID)
         .equal(jobRoleTestDetails.roleId);
       expect(result.find((x) => x.Name === jobRoleTestDetails.name).Name)
@@ -268,7 +267,6 @@ describe('dbCommands', async () => {
 
     it('Should successfully return no results if user an is not an admin', async () => {
       const result = await dbCommandsAdmin.checkIfAdmin(userTestDetails.username);
-      console.log(result);
       expect(result.length).equal(0);
     });
 

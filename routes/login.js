@@ -7,9 +7,7 @@ const DatabaseError = require('../errors/DatabaseError');
 router.get('/checkIfUserExists/:username', async (req, res) => {
   try {
     const { username } = req.params;
-    console.log(username);
     const results = await dbCommandsAdmin.checkIfUserExists(username);
-    console.log(results);
     res.status(200);
     if (results.length > 0) {
       res.send(true);
