@@ -39,18 +39,17 @@ const additionalBandTestDetails = {
   responsibilities: 'TestResponsibilities',
 };
 
-const familyTestDetails = {
-  familyId: 9000,
-  name: 'TestName',
-};
-
 const capabilityTestDetails = {
   capId: 9000,
   name: 'TestName',
-  jobFamily: 'TestJobFamily',
+};
+
+const familyTestDetails = {
+  familyId: 9000,
+  name: 'TestName',
   leadName: 'TestLeadName',
   leadMessage: 'TestLeadMessage',
-  familyId: familyTestDetails.familyId,
+  capId: capabilityTestDetails.capId,
   leadImage: 'TestImagePath',
 };
 
@@ -285,8 +284,16 @@ describe('dbCommands', async () => {
   describe('getAllFamiliesWithCapability', async () => {
     it('Should successfully return all families with the relevant Cabability Name', async () => {
       const result = await dbCommands.getAllFamiliesWithCapability();
-      expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
-      expect(result[result.length - 1].Job_Family).equal(capabilityTestDetails.jobFamily);
+      expect(result[result.length - 1].CapabilityName).equal(capabilityTestDetails.name);
+      expect(result[result.length - 1].Name).equal(familyTestDetails.name);
+    });
+  });
+
+  describe('getCapabilityLead', async () => {
+    it('Should successfully return information about the capability lead', async () => {
+      const result = await dbCommands.getCapabilityLead();
+      expect(result[result.length - 1].leadName).equal(familyTestDetails.name);
+      expect(result[result.length - 1].leadMessage).equal(familyTestDetails.leadMessage);
     });
   });
 });
