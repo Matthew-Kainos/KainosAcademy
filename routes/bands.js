@@ -1,4 +1,5 @@
 const express = require('express');
+const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 
 const router = express.Router();
 const dbCommands = require('../model/dbCommands');
@@ -31,6 +32,22 @@ router.post('/addBand', async (req, res) => {
       await dbCommands.addBand(data);
     } else { console.log('ERROR PROCESSING'); }
     res.send('New Band Successfully added');
+    res.status(200);
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+});
+
+router.get('/getAllBandNames', async (req, res) => {
+  try {
+    const results = await dbCommandsAdmin.getAllBandNames();
+    res.send(results);
     res.status(200);
   } catch (e) {
     res.status(500);

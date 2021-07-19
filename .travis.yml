@@ -6,7 +6,6 @@ services:
 script:
  - mocha tests/integrationTests/APITests --exit
  - mocha tests/integrationTests --exit
- - mocha tests --exit
 notifications: 
   email: 
     recipients: 

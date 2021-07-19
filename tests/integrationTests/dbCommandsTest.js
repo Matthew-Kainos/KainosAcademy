@@ -1,3 +1,5 @@
+/* eslint-disable eqeqeq */
+/* eslint-disable max-len */
 const chai = require('chai');
 const DatabaseError = require('../../errors/DatabaseError');
 
@@ -112,14 +114,10 @@ describe('dbCommands', async () => {
   describe('getAllRolesAndBandDB', async () => {
     it('Should successfully return role name and role band by the enter role name', async () => {
       const result = await dbCommands.getAllRolesAndBandDB(jobRoleTestDetails.name);
-      expect(result.find((x) => x.Role === jobRoleTestDetails.name).Role)
-        .equal(jobRoleTestDetails.name);
-      expect(result.find((x) => x.Role === jobRoleTestDetails.name).RoleBand)
-        .equal(bandTestDetails.name);
-      expect(result.find((x) => x.Role === additionalJobRoleTestDetails.name).Role)
-        .equal(additionalJobRoleTestDetails.name);
-      expect(result.find((x) => x.Role === additionalJobRoleTestDetails.name).RoleBand)
-        .equal(additionalBandTestDetails.name);
+      expect(result.find((x) => x.Role == jobRoleTestDetails.name).Role).equal(jobRoleTestDetails.name);
+      expect(result.find((x) => x.Role == jobRoleTestDetails.name).RoleBand).equal(bandTestDetails.name);
+      expect(result.find((x) => x.Role == additionalJobRoleTestDetails.name).Role).equal(additionalJobRoleTestDetails.name);
+      expect(result.find((x) => x.Role == additionalJobRoleTestDetails.name).RoleBand).equal(additionalBandTestDetails.name);
     });
     it('Should successfully throw Database Error if connection', async () => {
       try {
@@ -136,10 +134,6 @@ describe('dbCommands', async () => {
       const result = await dbCommands.checkIfJobExists(jobRoleTestDetails.name);
       expect(result[0].Name).equal(jobRoleTestDetails.name);
     });
-    it('Should successfully return job role details if job exists using partial name to query', async () => {
-      const result = await dbCommands.checkIfJobExists('%Test%');
-      expect(result[0].Name).equal(jobRoleTestDetails.name);
-    });
     it('Should successfully return empty result if job name is not valid', async () => {
       const result = await dbCommands.checkIfJobExists('abc');
       expect(result.length).equal(0);
@@ -150,6 +144,25 @@ describe('dbCommands', async () => {
       } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling checkIfJobExists with message');
+      }
+    });
+  });
+
+  describe('getJobRoles', async () => {
+    it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async () => {
+      const result = await dbCommands.getJobRoles();
+      console.log(result);
+      expect(result.find((x) => x.Role_ID === jobRoleTestDetails.roleId).Role_ID)
+        .equal(jobRoleTestDetails.roleId);
+      expect(result.find((x) => x.Name === jobRoleTestDetails.name).Name)
+        .equal(jobRoleTestDetails.name);
+    });
+    it('Should successfully throw Database Error if connection', async () => {
+      try {
+        await dbCommands.getJobRoles(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getJobRoles with message');
       }
     });
   });
@@ -191,7 +204,7 @@ describe('dbCommands', async () => {
       const result = await dbCommands.getAllJobsWithCapability();
       expect(result[result.length - 1].cap_id).equal(capabilityTestDetails.capId);
       expect(result[result.length - 1].CapabilityName).equal(capabilityTestDetails.name);
-      expect(result[result.length - 1].JobRoleName).equal(jobRoleTestDetails.name);
+      expect(result[result.length - 1].JobRoleName).equal(additionalJobRoleTestDetails.name);
     });
   });
 
