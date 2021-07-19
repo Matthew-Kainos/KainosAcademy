@@ -1,0 +1,508 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Swagger Documentation for Jobs Portal Backend",
+        "version": "1.0.0",
+        "title": "Jobs Portal Backend"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "jobs",
+            "description": "Everything related to jobs"
+        },
+        {
+            "name": "capabilities",
+            "description": "Everything related to Capabilities"
+        },
+        {
+            "name": "add",
+            "description": "Operations for adding"
+        },
+        {
+            "name": "bands",
+            "description": "Everything related to bands"
+        },
+        {
+            "name": "delete",
+            "description": "Operations for deleting"
+        }        
+    ],
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/jobs/job-roles": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Gets All Jobs",
+                "description": "",
+                "operationId": "job-roles",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/job-role"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/jobs/checkIfJobExists/{jobName}": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Gets job spec for job",
+                "description": "",
+                "operationId": "checkIfJobExists",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "jobName",
+                        "in": "path",
+                        "description": "Name of job role to get details",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/jobs/band": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Gets All bands for job roles",
+                "description": "",
+                "operationId": "band",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/jobBand"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/jobs/getAllJobsWithCapability": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Gets All jobs with capabilities",
+                "description": "",
+                "operationId": "getAllJobsWithCapability",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/jobCapability"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/jobs/jobSpec/{roleID}": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Gets All jobs with capabilities",
+                "description": "",
+                "operationId": "jobSpec",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "roleID",
+                        "in": "path",
+                        "description": "ID of role to get spec",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/jobSpec"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/capabilities/getAllCapabilityNames": {
+            "get": {
+                "tags": [
+                    "capabilities"
+                ],
+                "summary": "Get all Capability Names",
+                "description": "",
+                "operationId": "getAllCapabilityNames",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/capabilityName"
+                            }
+                        }                        
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/capabilities/getAllFamiliesWithCapability": {
+            "get": {
+                "tags": [
+                    "capabilities"
+                ],
+                "summary": "Get Familys and Capabilities",
+                "description": "",
+                "operationId": "getAllFamiliesWithCapability",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/capabilityName"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/capabilities/viewCapabilityLead/{capID}": {
+            "get": {
+                "tags": [
+                    "capabilities"
+                ],
+                "summary": "Gets capability lead based on cap ID",
+                "description": "",
+                "operationId": "viewCapabilityLead",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "roleID",
+                        "in": "path",
+                        "description": "ID of role to get spec",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/jobSpec"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/capabilities/family/{capName}": {
+            "get": {
+                "tags": [
+                    "capabilities"
+                ],
+                "summary": "Gets family based on capability Name",
+                "description": "",
+                "operationId": "family",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "capName",
+                        "in": "path",
+                        "description": "Name of capability to get family",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/jobSpec"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/bands/getAllBandNames": {
+            "get": {
+                "tags": [
+                    "bands"
+                ],
+                "summary": "Gets All bands for job roles",
+                "description": "",
+                "operationId": "band",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/bandName"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/add/role": {
+            "post": {
+                "tags": [
+                    "add"
+                ],
+                "summary": "Adds role",
+                "description": "",
+                "operationId": "role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created user object",
+                        "required": true,
+                        "properties": {
+                            "newRoleDetails": {
+                                "$ref": "#/definitions/newRoleDetails"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "job-role": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Role_ID": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Level": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "jobBand": {
+            "type": "object",
+            "properties": {
+                "Role": {
+                    "type": "string"
+                },
+                "RoleBand": {
+                    "type": "string"
+                }
+            }
+        },
+        "jobCapability": {
+            "type": "object",
+            "properties": {
+                "JobRoleName": {
+                    "type": "string"
+                },
+                "cap_id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "CapabilityName": {
+                    "type": "string"
+                }
+            }
+        },
+        "jobSpec": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Role_ID": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Spec_Sum": {
+                    "type": "string"
+                },
+                "Spec_Link": {
+                    "type": "string"
+                }                
+            }
+        },
+        "capabilityName": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                }
+            }
+        },
+        "bandName": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                }
+            }
+        },
+        "newRoleDetails": {
+            "type": "object",
+            "properties": {
+                "RoleName": {
+                    "type": "string"
+                },
+                "SpecSum": {
+                    "type": "string"
+                },
+                "SpecLink": {
+                    "type": "string"
+                },
+                "Capability": {
+                    "type": "string"
+                },
+                "Band": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
