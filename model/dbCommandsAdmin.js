@@ -124,3 +124,35 @@ exports.checkInsertRole = async (name) => {
     throw new DatabaseError(`Error calling checkInsertRole with message: ${e.message}`);
   }
 };
+
+exports.addNewFamily = async (familyDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Name, LeadName, LeadMessage, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?)',
+      [familyDetails.familyName,
+        familyDetails.leadName,
+        familyDetails.leadMessage,
+        familyDetails.leadImage,
+        familyDetails.capId],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling addNewFamily with message: ${e.message}`);
+  }
+};
+
+exports.deleteJobFamily = async (familyDetails) => {
+  try {
+    return await db.query(
+      'DELETE FROM GroupBSprint.Family(Family_ID, Name, LeadName, LeadMessege, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?, ?)',
+      [familyDetails.familyId,
+        familyDetails.familyName,
+        familyDetails.leadName,
+        familyDetails.leadMessage,
+        familyDetails.leadImage,
+        familyDetails.capId],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
+  }
+};

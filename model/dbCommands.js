@@ -150,26 +150,12 @@ exports.getAllFamiliesWithCapability = async () => {
   }
 };
 
-exports.addJobFamily = async (data) => {
+exports.checkIfFamilyExists = async (familyName) => {
   try {
     return await db.query(
-      'INSERT INTO GroupBSprint.Family(Name)'
-            + ' VALUES (?)',
-      [data.Name],
+      'SELECT * FROM Family WHERE Name = ?', familyName,
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling addJobFamily with message: ${e.message}`);
-  }
-};
-
-exports.deleteJobFamily = async (data) => {
-  try {
-    return await db.query(
-      'INSERT INTO GroupBSprint.Family(Family_ID, Name)'
-            + ' VALUES (?, ?)',
-      [data.Name],
-    );
-  } catch (e) {
-    throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
+    throw new DatabaseError(`Error calling checkIfFamilyExists with message: ${e.message}`);
   }
 };

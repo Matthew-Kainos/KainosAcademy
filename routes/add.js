@@ -38,4 +38,35 @@ router.post('/role', async (req, res) => {
   }
 });
 
+router.post('/family', async (req, res) => {
+  try {
+    const { newFamilyDetails } = req.body;
+    const results = await dbCommands.checkIfFamilyExists(newFamilyDetails.FamilyName);
+    const capbailityId = await dbCommandsAdmin.getCapabilityIdFromName(newFamilyDetails.Capability);
+    if (results.length === 0) {
+      const newFamily = {
+        familyName: newFamilyDetails.FamilyName,
+        leadName: newFamilyDetails.LeadName,
+        leadMessage: newFamilyDetails.LeadMessage,
+        leadImage: newFamilyDetails.LeadImage,
+        capId: capbailityId[0].Cap_ID,
+      };
+      await dbCommandsAdmin.addNewFamily(newFamily);
+      res.send({ success: true, message: `New Family ${newFamilyDetails.FamilyName} Added` });
+      res.status(200);
+    } else {
+      res.send({ success: false, message: 'Unable to add Family due to Duplicate Family Name' });
+      res.status(400);
+    }
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+});
+
 module.exports = router;

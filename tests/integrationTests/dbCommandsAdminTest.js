@@ -146,4 +146,28 @@ describe('dbCommandsAdmin', async () => {
       }
     });
   });
+
+  describe('addNewFamily', async () => {
+    it('Should successfully add new job family ', async () => {
+      const newFamilyDetails = {
+        familyName: 'TestFamily2',
+        leadName: 'leadName',
+        leadMessage: 'message',
+        leadImage: 'image',
+        capId: capabilityTestDetails.capId,
+      };
+      await dbCommandsAdmin.addNewFamily(newFamilyDetails);
+      const result = await dbCommandsAdmin.checkInsertFamily(newFamilyDetails.familyName);
+      expect(result[0].Name).to.equal(newFamilyDetails.familyName);
+      await testDatabaseCommands.testDeleteJobFamily(newFamilyDetails.familyName);
+    });
+    it('Should successfully throw Database Error is error occurs in database', async () => {
+      try {
+        await dbCommandsAdmin.addNewFamily(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling addNewFamily with message');
+      }
+    });
+  });
 });
