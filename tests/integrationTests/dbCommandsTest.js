@@ -39,8 +39,8 @@ const additionalBandTestDetails = {
   responsibilities: 'TestResponsibilities',
 };
 
-const familyTestDetails = {
-  familyId: 9000,
+const capabilityTestDetails = {
+  capId: 9000,
   name: 'TestName',
   // leadName: 'TestLeadName',
   // leadMessage: 'TestLeadMessage',
@@ -48,13 +48,12 @@ const familyTestDetails = {
   // capId: capabilityTestDetails.capId,
 };
 
-const capabilityTestDetails = {
-  capId: 9000,
+const familyTestDetails = {
+  familyId: 9000,
   name: 'TestName',
-  jobFamily: 'TestJobFamily',
   leadName: 'TestLeadName',
   leadMessage: 'TestLeadMessage',
-  familyId: familyTestDetails.familyId,
+  capId: capabilityTestDetails.capId,
   leadImage: 'TestImagePath',
 };
 
@@ -80,10 +79,10 @@ describe('dbCommands', async () => {
   beforeEach(async () => {
     await testDatabaseCommands.testInsertUser(userTestDetails);
     await testDatabaseCommands.testInsertUser(adminUserTestDetails);
+    await testDatabaseCommands.testInsertCapability(capabilityTestDetails);
     await testDatabaseCommands.testInsertFamily(familyTestDetails);
     await testDatabaseCommands.testInsertBand(bandTestDetails);
     await testDatabaseCommands.testInsertBand(additionalBandTestDetails);
-    await testDatabaseCommands.testInsertCapability(capabilityTestDetails);
     await testDatabaseCommands.testInsertJobRole(jobRoleTestDetails);
     await testDatabaseCommands.testInsertJobRole(additionalJobRoleTestDetails);
   });
@@ -93,10 +92,10 @@ describe('dbCommands', async () => {
     await testDatabaseCommands.testDeleteUser(adminUserTestDetails.username);
     await testDatabaseCommands.testDeleteJobRole(additionalJobRoleTestDetails.name);
     await testDatabaseCommands.testDeleteJobRole(jobRoleTestDetails.name);
-    await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
     await testDatabaseCommands.testDeleteFamily(familyTestDetails.name);
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
     await testDatabaseCommands.testDeleteBand(additionalBandTestDetails.name);
+    await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
   });
 
   describe('getRoleAndBandDB', async () => {
@@ -155,7 +154,6 @@ describe('dbCommands', async () => {
   describe('getJobRoles', async () => {
     it('Should successfully show all list Role_ID and Name from JobRoles Table order by Band Level', async () => {
       const result = await dbCommands.getJobRoles();
-      console.log(result);
       expect(result.find((x) => x.Role_ID === jobRoleTestDetails.roleId).Role_ID)
         .equal(jobRoleTestDetails.roleId);
       expect(result.find((x) => x.Name === jobRoleTestDetails.name).Name)
@@ -190,8 +188,7 @@ describe('dbCommands', async () => {
   describe('getFamilyBasedOnCapability', async () => {
     it('Should successfully return Family based on Capability Name', async () => {
       const result = await dbCommands.getFamilyBasedOnCapability(capabilityTestDetails.name);
-      expect(result[0].Job_Family).equal(capabilityTestDetails.jobFamily);
-      expect(result[0].Name).equal(capabilityTestDetails.name);
+      expect(result[result.length - 1].Job_Family).equal(familyTestDetails.name);
     });
     it('Should successfully throw Database Error if connection', async () => {
       try {
@@ -272,7 +269,6 @@ describe('dbCommands', async () => {
 
     it('Should successfully return no results if user an is not an admin', async () => {
       const result = await dbCommandsAdmin.checkIfAdmin(userTestDetails.username);
-      console.log(result);
       expect(result.length).equal(0);
     });
 
@@ -287,10 +283,20 @@ describe('dbCommands', async () => {
   });
 
   describe('getAllFamiliesWithCapability', async () => {
-    it('Should successfully return all families with the relevant Cabability Name', async () => {
+    it('Should successfully return all families with the relevant Capability Name', async () => {
       const result = await dbCommands.getAllFamiliesWithCapability();
-      expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
-      expect(result[result.length - 1].Job_Family).equal(capabilityTestDetails.jobFamily);
+      expect(result.find((x) => x.Name == capabilityTestDetails.name).Name).equal(capabilityTestDetails.name);
+      expect(result.find((x) => x.Job_Family == familyTestDetails.name).Job_Family).equal(familyTestDetails.name);
+      // expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
+      // expect(result[result.length - 1].Job_Family).equal(familyTestDetails.name);
+    });
+  });
+
+  describe('getCapabilityLead', async () => {
+    it('Should successfully return information about the capability lead', async () => {
+      const result = await dbCommands.getCapabilityLead(capabilityTestDetails.capId);
+      expect(result[result.length - 1].LeadName).equal(familyTestDetails.leadName);
+      expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
     });
   });
 });
