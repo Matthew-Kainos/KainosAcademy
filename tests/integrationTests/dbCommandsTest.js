@@ -288,7 +288,7 @@ describe('dbCommands', async () => {
 
   describe('getCapabilityLead', async () => {
     it('Should successfully return information about the capability lead', async () => {
-      const result = await dbCommands.getCapabilityLead(familyTestDetails.familyID);
+      const result = await dbCommands.getCapabilityLead(familyTestDetails.familyId);
       expect(result[result.length - 1].LeadName).equal(familyTestDetails.leadName);
       expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
     });
