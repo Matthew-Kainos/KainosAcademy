@@ -188,3 +188,14 @@ exports.getTraining = async () => {
     throw new DatabaseError(`Error calling getTraining with message: ${e.message}`);
   }
 };
+
+exports.setTrainingForBand = async (trainingID, bandID) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Band_Training(Train_ID, Band_ID) VALUES (?, ?)',
+      [trainingID, bandID],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling setTrainingForBand with message: ${e.message}`);
+  }
+};

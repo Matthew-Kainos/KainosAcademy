@@ -123,11 +123,48 @@ describe('dbCommandsAdmin', async () => {
     });
   });
 
-  describe('getBandName', async () => {
-    it.only('Should successfully return the competency names', async () => {
+  describe('getBandNames', async () => {
+    it.only('Should successfully return the band names, no dupilcates', async () => {
       const result = await dbCommandsAdmin.getBandNames();
-      expect(result.find((x) => x.Name === competencyLevelTestDetails.Name).Name)
-        .equal(competencyLevelTestDetails.Name);
+      expect(result.find((x) => x.Name === bandTestDetails.name).Name)
+        .equal(bandTestDetails.name);
+      expect(result.find((x) => x.Name === additionalBandTestDetails.name).Name)
+        .equal(additionalBandTestDetails.name);
+    });
+  });
+
+  describe('getBandLevel', async () => {
+    it.only('Should successfully return the band level for a given band', async () => {
+      const resultOne = await dbCommandsAdmin.getBandLevel(bandTestDetails.name);
+      const resultTwo = await dbCommandsAdmin.getBandLevel(additionalBandTestDetails.name);
+      expect(resultOne[0].Level).equal(bandTestDetails.level);
+      expect(resultTwo[0].Level).equal(additionalBandTestDetails.level);
+    });
+  });
+
+  describe('getBandLevel', async () => {
+    it.only('Should successfully return the band level for a given band', async () => {
+      await dbCommandsAdmin.updateBandLevels(bandTestDetails.name);
+      const resultOne = await dbCommandsAdmin.getBandLevel(bandTestDetails.name);
+      const resultTwo = await dbCommandsAdmin.getBandLevel(additionalBandTestDetails.name);
+      expect(resultOne[0].Level).equal(bandTestDetails.level + 1);
+      expect(resultTwo[0].Level).equal(additionalBandTestDetails.level + 1);
+    });
+  });
+
+  describe('addBand', async () => {
+    it.only('Should successfully add new band ', async () => {
+      const newBandDetails = {
+        Name: 'NewTestBandOneFour',
+        Level: 3,
+        Training: 'TestTraining',
+        Competencies: 'TestCompetencies',
+        Responsibilities: 'TestResponsibilities',
+      };
+      await dbCommandsAdmin.addBand(newBandDetails);
+      const result = await dbCommandsAdmin.getBandNames();
+      expect(result.find((x) => x.Name === newBandDetails.Name).Name)
+        .equal(newBandDetails.Name);
     });
   });
 

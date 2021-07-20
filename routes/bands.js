@@ -4,45 +4,6 @@ const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 const router = express.Router();
 const DatabaseError = require('../errors/DatabaseError');
 
-router.post('/addBand', async (req, res) => {
-  try {
-    if (req.body.aboveOrBelow === 'bandAbove') {
-      const level = await dbCommandsAdmin.getBandLevel(req.body.refBand);
-      await dbCommandsAdmin.updateBandLevels(level[0].Level);
-      const data = {
-        Name: req.body.name,
-        Level: level[0].Level,
-        Training: req.body.training.toString(),
-        Competencies: req.body.competencies,
-        Responsibilities: req.body.responsiblities,
-      };
-      await dbCommandsAdmin.addBand(data);
-    } else if (req.body.aboveOrBelow === 'bandBelow') {
-      const level = await dbCommandsAdmin.getBandLevel(req.body.refBand);
-      const newLevel = Number(level[0].Level) + 1;
-      await dbCommandsAdmin.updateBandLevels(newLevel.toString());
-      const data = {
-        Name: req.body.name,
-        Level: newLevel.toString(),
-        Training: req.body.training.toString(),
-        Competencies: req.body.competencies,
-        Responsibilities: req.body.responsiblities,
-      };
-      await dbCommandsAdmin.addBand(data);
-    } else { console.log('ERROR PROCESSING'); }
-    res.send('New Band Successfully added');
-    res.status(200);
-  } catch (e) {
-    res.status(500);
-    if (e instanceof DatabaseError) {
-      res.send('Database Error');
-      console.error(e.message);
-    }
-    res.send('Error');
-    console.error(e.message);
-  }
-});
-
 router.get('/getAllBandNames', async (req, res) => {
   try {
     const results = await dbCommandsAdmin.getAllBandNames();
