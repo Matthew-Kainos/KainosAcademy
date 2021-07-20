@@ -9,6 +9,7 @@ const capabilities = require('./routes/capabilities');
 const bands = require('./routes/bands');
 const login = require('./routes/login');
 const add = require('./routes/add');
+const deleteRoute = require('./routes/delete');
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -18,6 +19,7 @@ app.use('/capabilities', capabilities);
 app.use('/bands', bands);
 app.use('/login', login);
 app.use('/add', add);
+app.use('/delete', deleteRoute);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
