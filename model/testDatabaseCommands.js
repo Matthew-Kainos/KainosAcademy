@@ -158,3 +158,48 @@ exports.testDeleteBand = async (name) => {
     throw new DatabaseError(`Error calling testDeleteBand with message: ${e.message}`);
   }
 };
+
+exports.testInsertTraining = async (trainingTestDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Training(Name) VALUES (?)', [
+        trainingTestDetails.Name],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling testInsertTraining with message: ${e.message}`);
+  }
+};
+
+exports.testDeleteTraining = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM Training WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteTraining with message: ${e.message}`);
+  }
+};
+
+exports.testInsertCompetencyLevel = async (compLevelTestDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.CompetencyLevel(Name, EquivalentRole) values (?, ?)', [
+        compLevelTestDetails.Name,
+        compLevelTestDetails.EquivalentRole],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling testInsertTraining with message: ${e.message}`);
+  }
+};
+
+exports.testDeleteCompetencyLevel = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM CompetencyLevel WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteCompetencyLevel with message: ${e.message}`);
+  }
+};

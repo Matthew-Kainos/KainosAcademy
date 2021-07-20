@@ -2,14 +2,13 @@ const express = require('express');
 const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 
 const router = express.Router();
-const dbCommands = require('../model/dbCommands');
 const DatabaseError = require('../errors/DatabaseError');
 
 router.post('/addBand', async (req, res) => {
   try {
     if (req.body.aboveOrBelow === 'bandAbove') {
-      const level = await dbCommands.getBandLevel(req.body.refBand);
-      await dbCommands.updateBandLevels(level[0].Level);
+      const level = await dbCommandsAdmin.getBandLevel(req.body.refBand);
+      await dbCommandsAdmin.updateBandLevels(level[0].Level);
       const data = {
         Name: req.body.name,
         Level: level[0].Level,
@@ -17,11 +16,11 @@ router.post('/addBand', async (req, res) => {
         Competencies: req.body.competencies,
         Responsibilities: req.body.responsiblities,
       };
-      await dbCommands.addBand(data);
+      await dbCommandsAdmin.addBand(data);
     } else if (req.body.aboveOrBelow === 'bandBelow') {
-      const level = await dbCommands.getBandLevel(req.body.refBand);
+      const level = await dbCommandsAdmin.getBandLevel(req.body.refBand);
       const newLevel = Number(level[0].Level) + 1;
-      await dbCommands.updateBandLevels(newLevel.toString());
+      await dbCommandsAdmin.updateBandLevels(newLevel.toString());
       const data = {
         Name: req.body.name,
         Level: newLevel.toString(),
@@ -29,7 +28,7 @@ router.post('/addBand', async (req, res) => {
         Competencies: req.body.competencies,
         Responsibilities: req.body.responsiblities,
       };
-      await dbCommands.addBand(data);
+      await dbCommandsAdmin.addBand(data);
     } else { console.log('ERROR PROCESSING'); }
     res.send('New Band Successfully added');
     res.status(200);
@@ -62,11 +61,11 @@ router.get('/getAllBandNames', async (req, res) => {
 
 router.get('/info', async (req, res) => {
   try {
-    const bandNames = await dbCommands.getBandNames();
+    const bandNames = await dbCommandsAdmin.getBandNames();
     const Names = bandNames.map((element) => element.Name);
-    const bandComp = await dbCommands.getCompetencies();
-    const Competencies = bandComp.map((element) => element.Competencies);
-    const bandTraining = await dbCommands.getTraining();
+    const bandComp = await dbCommandsAdmin.getCompetencies();
+    const Competencies = bandComp.map((element) => element.Name);
+    const bandTraining = await dbCommandsAdmin.getTraining();
     const Training = bandTraining.map((element) => element.Name);
     const results = {
       names: Names,

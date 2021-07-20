@@ -57,6 +57,17 @@ const additionalJobRoleTestDetails = {
   bandId: additionalBandTestDetails.bandId,
 };
 
+const trainingTestDetails = {
+  TrainId: 9010,
+  Name: 'TestTrainingCourse',
+};
+
+const competencyLevelTestDetails = {
+  TrainId: 9010,
+  Name: 'TestCompetencyLevel',
+  EquivalentRole: 'TestRoleName',
+};
+
 describe('dbCommandsAdmin', async () => {
   beforeEach(async () => {
     await testDatabaseCommands.testInsertFamily(familyTestDetails);
@@ -65,6 +76,8 @@ describe('dbCommandsAdmin', async () => {
     await testDatabaseCommands.testInsertCapability(capabilityTestDetails);
     await testDatabaseCommands.testInsertJobRole(jobRoleTestDetails);
     await testDatabaseCommands.testInsertJobRole(additionalJobRoleTestDetails);
+    await testDatabaseCommands.testInsertTraining(trainingTestDetails);
+    await testDatabaseCommands.testInsertCompetencyLevel(competencyLevelTestDetails);
   });
 
   afterEach(async () => {
@@ -74,6 +87,8 @@ describe('dbCommandsAdmin', async () => {
     await testDatabaseCommands.testDeleteFamily(familyTestDetails.name);
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
     await testDatabaseCommands.testDeleteBand(additionalBandTestDetails.name);
+    await testDatabaseCommands.testDeleteTraining(trainingTestDetails.Name);
+    await testDatabaseCommands.testDeleteCompetencyLevel(competencyLevelTestDetails.Name);
   });
 
   describe('getAllBandNames', async () => {
@@ -89,6 +104,30 @@ describe('dbCommandsAdmin', async () => {
       const result = await dbCommandsAdmin.getAllCapabilityNames();
       expect(result.length).to.greaterThan(0);
       expect(result[0].Name).to.be.an('string');
+    });
+  });
+
+  describe('getTraining', async () => {
+    it.only('Should successfully return the training courses available', async () => {
+      const result = await dbCommandsAdmin.getTraining();
+      expect(result.find((x) => x.Name === trainingTestDetails.Name).Name)
+        .equal(trainingTestDetails.Name);
+    });
+  });
+
+  describe('getCompetencies', async () => {
+    it.only('Should successfully return the competency names', async () => {
+      const result = await dbCommandsAdmin.getCompetencies();
+      expect(result.find((x) => x.Name === competencyLevelTestDetails.Name).Name)
+        .equal(competencyLevelTestDetails.Name);
+    });
+  });
+
+  describe('getBandName', async () => {
+    it.only('Should successfully return the competency names', async () => {
+      const result = await dbCommandsAdmin.getBandNames();
+      expect(result.find((x) => x.Name === competencyLevelTestDetails.Name).Name)
+        .equal(competencyLevelTestDetails.Name);
     });
   });
 
