@@ -58,3 +58,69 @@ exports.checkIfAdmin = async (name) => {
     throw new DatabaseError(`Error calling getUsersPassword with message: ${e.message}`);
   }
 };
+
+exports.getAllBandNames = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM Band',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getUsersPassword with message: ${e.message}`);
+  }
+};
+
+exports.getAllCapabilityNames = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM Capabilities Group BY Name',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getUsersPassword with message: ${e.message}`);
+  }
+};
+
+exports.addNewRole = async (jobRoleDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO JobRoles (Name, Spec_Sum, Spec_Link, Cap_ID, Band_ID) values (?, ?, ?, ?, ?)', [
+        jobRoleDetails.roleName,
+        jobRoleDetails.specSum,
+        jobRoleDetails.specLink,
+        jobRoleDetails.capId,
+        jobRoleDetails.bandId],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
+  }
+};
+
+exports.getCapabilityIdFromName = async (capabilityName) => {
+  try {
+    return await db.query(
+      'SELECT Cap_ID FROM Capabilities WHERE Name = ?', capabilityName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getCapabilityIdFromName with message: ${e.message}`);
+  }
+};
+
+exports.getBandIdFromName = async (bandName) => {
+  try {
+    return await db.query(
+      'SELECT Band_Id As `BandID` FROM Band WHERE Name = ?', bandName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandIdFromName with message: ${e.message}`);
+  }
+};
+
+exports.checkInsertRole = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM JobRoles WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkInsertRole with message: ${e.message}`);
+  }
+};

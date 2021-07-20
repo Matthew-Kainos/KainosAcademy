@@ -37,31 +37,31 @@ describe('Bands', () => {
       getCompetenciesBasedOnBandStub.restore();
     });
   });
-  describe('getAllBands', () => {
+  describe('getAllBandsAndCompetencies', () => {
     it('Should return 200 and correct results if called', () => {
-      const returnedResults = { BandName: 'fakeBandName' };
-      const getAllBandsStub = sinon.stub(dbCommands, 'getAllBands');
-      getAllBandsStub.returns(returnedResults);
+      const returnedResults = { BandName: 'fakeBandName', CompetencyName: 'fakeCompName' };
+      const getAllBandsAndCompetenciesStub = sinon.stub(dbCommands, 'getAllBandsAndCompetencies');
+      getAllBandsAndCompetenciesStub.returns(returnedResults);
       request(app)
-        .get('/bands/getAllBands')
+        .get('/bands/getAllBandsAndCompetencies')
         .set('Accept', 'application/json')
         .expect(200)
         .then((response) => {
           expect(response.text).equal(JSON.stringify(returnedResults));
         });
-      getAllBandsStub.restore();
+      getAllBandsAndCompetenciesStub.restore();
     });
     it('Should return 500 if there is a database error', () => {
-      const getAllBandsStub = sinon.stub(dbCommands, 'getAllBands');
-      getAllBandsStub.throws(new DatabaseError());
+      const getAllBandsAndCompetenciesStub = sinon.stub(dbCommands, 'getAllBandsAndCompetencies');
+      getAllBandsAndCompetenciesStub.throws(new DatabaseError());
       request(app)
-        .get('/bands/getAllBands')
+        .get('/bands/getAllBandsAndCompetencies')
         .set('Accept', 'application/json')
         .expect(500)
         .then((response) => {
           expect(response.text).equal('Database Error');
         });
-      getAllBandsStub.restore();
+      getAllBandsAndCompetenciesStub.restore();
     });
   });
 });

@@ -1,9 +1,26 @@
 const express = require('express');
+const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 
 const router = express.Router();
 const dbCommands = require('../model/dbCommands');
 
 const DatabaseError = require('../errors/DatabaseError');
+
+router.get('/getAllBandNames', async (req, res) => {
+  try {
+    const results = await dbCommandsAdmin.getAllBandNames();
+    res.send(results);
+    res.status(200);
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+});
 
 router.get('/addBand', (req, res) => {
   try {
@@ -48,8 +65,8 @@ router.get('/competencies/:bandName', async (req, res) => {
   }
 }); */
 
-// MY CODE
-router.get('/getAllBands', async (req, res) => {
+// MY CODE- USED
+router.get('/getAllBandsAndCompetencies', async (req, res) => {
   try {
     const results = await dbCommands.getAllBandsAndCompetencies();
     res.send(results);
