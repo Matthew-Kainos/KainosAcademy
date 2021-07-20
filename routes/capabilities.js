@@ -108,7 +108,6 @@ router.get('/viewCapabilityLead/:capID', async (req, res) => {
   try {
     const { capID } = req.params;
     const results = await dbCommands.getCapabilityLead(capID);
-    console.log(results);
     res.send(results);
     res.status(200);
   } catch (e) {

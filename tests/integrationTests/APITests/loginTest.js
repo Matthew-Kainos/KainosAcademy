@@ -99,9 +99,7 @@ describe('Login', () => {
       await request(app)
         .get('/login/checkIfAdmin/fakeName')
         .set('Accept', 'application/json')
-        .then((res, err) => {
-          console.log('here');
-          console.log(err);
+        .then((res) => {
           expect(res.text).equal('false');
         });
       checkIfAdminStub.restore();
