@@ -104,11 +104,10 @@ router.get('/getAllFamiliesWithCapability', async (req, res) => {
   }
 });
 
-router.get('/viewCapabilityLead/:capID', async (req, res) => {
+router.get('/viewCapabilityLead/:familyID', async (req, res) => {
   try {
-    const { capID } = req.params;
-    const results = await dbCommands.getCapabilityLead(capID);
-    console.log(results);
+    const { familyID } = req.params;
+    const results = await dbCommands.getCapabilityLead(familyID);
     res.send(results);
     res.status(200);
   } catch (e) {
