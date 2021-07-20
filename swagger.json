@@ -17,12 +17,12 @@
             "description": "Everything related to Capabilities"
         },
         {
-            "name": "add",
-            "description": "Operations for adding"
-        },
-        {
             "name": "bands",
             "description": "Everything related to bands"
+        },
+        {
+            "name": "add",
+            "description": "Operations for adding"
         },
         {
             "name": "delete",
@@ -297,14 +297,14 @@
                 }
             }
         },
-        "/capabilities/family/{capName}": {
-            "get": {
+        "/delete/role": {
+            "delete": {
                 "tags": [
-                    "capabilities"
+                    "delete"
                 ],
-                "summary": "Gets family based on capability Name",
+                "summary": "Delete Role",
                 "description": "",
-                "operationId": "family",
+                "operationId": "deleteRole",
                 "consumes": [
                     "application/json"
                 ],
@@ -313,21 +313,28 @@
                 ],
                 "parameters": [
                     {
-                        "name": "capName",
-                        "in": "path",
-                        "description": "Name of capability to get family",
+                        "in": "body",
+                        "name": "body",
+                        "description": "Role Name",
                         "required": true,
-                        "type": "string"
+                        "properties": {
+                            "RoleName": {
+                                "type": "string"
+                            }
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/jobSpec"
-                            }
+                            "$ref": "#/definitions/deleteSuccess"
+                        }
+                    },
+                    "404": {
+                        "description": "Invalid Input",
+                        "schema": {
+                            "$ref": "#/definitions/deleteFailure"
                         }
                     },
                     "500": {
@@ -395,7 +402,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/addSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Input",
+                        "schema": {
+                            "$ref": "#/definitions/addFailure"
+                        }
                     },
                     "500": {
                         "description": "Internal Error"
@@ -480,6 +496,54 @@
             "type": "object",
             "properties": {
                 "Name": {
+                    "type": "string"
+                }
+            }
+        },
+        "deleteSuccess": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "default": "true"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "deleteFailure": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "addSuccess": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "default": "true"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "addFailure": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "message": {
                     "type": "string"
                 }
             }
