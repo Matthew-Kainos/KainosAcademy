@@ -34,7 +34,6 @@ router.get('/band', async (req, res) => {
 router.get('/checkIfJobExists/:jobName', async (req, res) => {
   try {
     const { jobName } = req.params;
-    console.log(jobName);
     const results = await dbCommands.checkIfJobExists(`${jobName}`);
     res.status(200);
     if (results.length > 0) {
