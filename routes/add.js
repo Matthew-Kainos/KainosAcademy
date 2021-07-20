@@ -82,7 +82,7 @@ router.post('/band', async (req, res) => {
       res.send({ success: true, message: `New Band ${newBandDetails.name} Added` });
       res.status(200);
     } else {
-      res.send({ success: false, message: 'Unable to add Role due to Duplicate Role Name' });
+      res.send({ success: false, message: 'Unable to add Band due to Duplicate Band Name' });
       res.status(400);
     }
   } catch (e) {
