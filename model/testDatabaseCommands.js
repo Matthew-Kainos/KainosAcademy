@@ -56,14 +56,9 @@ exports.testDeleteUser = async (name) => {
 exports.testInsertCapability = async (capabilityTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?, ?)', [
+      'INSERT INTO Capabilities values (?, ?)', [
         capabilityTestDetails.capId,
-        capabilityTestDetails.name,
-        capabilityTestDetails.jobFamily,
-        capabilityTestDetails.leadName,
-        capabilityTestDetails.leadMessage,
-        capabilityTestDetails.familyId,
-        capabilityTestDetails.leadImage],
+        capabilityTestDetails.name],
     );
   } catch (e) {
     throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
@@ -111,9 +106,13 @@ exports.testDeleteJobRole = async (name) => {
 exports.testInsertFamily = async (familyTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO Family values (?, ?)', [
+      'INSERT INTO Family values (?, ?, ?, ?, ?, ?)', [
         familyTestDetails.familyId,
-        familyTestDetails.name],
+        familyTestDetails.name,
+        familyTestDetails.leadName,
+        familyTestDetails.leadMessage,
+        familyTestDetails.leadImage,
+        familyTestDetails.capId],
     );
   } catch (e) {
     console.log(e);
