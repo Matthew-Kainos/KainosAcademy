@@ -112,7 +112,7 @@ exports.testInsertFamily = async (familyTestDetails) => {
         familyTestDetails.leadName,
         familyTestDetails.leadMessage,
         familyTestDetails.leadImage,
-        familyTestDetails.cap_ID],
+        familyTestDetails.capId],
     );
   } catch (e) {
     console.log(e);
