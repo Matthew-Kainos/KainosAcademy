@@ -248,7 +248,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/capabilityName"
+                                "$ref": "#/definitions/capabilityWithFamily"
                             }
                         }
                     },
@@ -274,9 +274,9 @@
                 ],
                 "parameters": [
                     {
-                        "name": "roleID",
+                        "name": "capID",
                         "in": "path",
-                        "description": "ID of role to get spec",
+                        "description": "ID of capability",
                         "required": true,
                         "type": "string"
                     }
@@ -287,7 +287,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/jobSpec"
+                                "$ref": "#/definitions/capabilityWithLeadDetails"
                             }
                         }
                     },
@@ -466,6 +466,17 @@
                 }
             }
         },
+        "capabilityWithFamily": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Job_Family": {
+                    "type": "string"
+                }
+            }
+        },
         "jobSpec": {
             "type": "object",
             "properties": {
@@ -488,6 +499,31 @@
             "type": "object",
             "properties": {
                 "Name": {
+                    "type": "string"
+                }
+            }
+        },
+        "capabilityWithLeadDetails": {
+            "type": "object",
+            "properties": {
+                "Cap_ID": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "Family_ID": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "LeadName": {
+                    "type": "string"
+                },
+                "LeadMessage": {
+                    "type": "string"
+                },
+                "LeadImage": {
                     "type": "string"
                 }
             }
