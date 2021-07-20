@@ -199,3 +199,13 @@ exports.setTrainingForBand = async (trainingID, bandID) => {
     throw new DatabaseError(`Error calling setTrainingForBand with message: ${e.message}`);
   }
 };
+
+exports.deleteARole = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM JobRoles WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling deleteARole with message: ${e.message}`);
+  }
+};
