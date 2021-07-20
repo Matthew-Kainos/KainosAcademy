@@ -13,11 +13,11 @@ router.get('/addBand', (req, res) => {
     res.send('Error');
   }
 });
-// MY CODE
+// MY CODE- MIGHT NEED DELETED
 router.get('/competencies/:bandName', async (req, res) => {
   try {
     const { bandName } = req.params;
-    const results = await dbCommands.getCompentenciesBasesOnBand(bandName);
+    const results = await dbCommands.getCompetenciesBasedOnBand(bandName);
     res.send(results);
     res.status(200);
   } catch (e) {
@@ -31,8 +31,8 @@ router.get('/competencies/:bandName', async (req, res) => {
   }
 });
 
-// MY CODE
-router.get('/checkIfBandExists/:bandName', async (req, res) => {
+// MY CODE- MAY NOT BE RELEVANT
+/* router.get('/checkIfBandExists/:bandName', async (req, res) => {
   try {
     const { bandName } = req.params;
     const results = await dbCommands.checkIfBandExists(bandName);
@@ -45,6 +45,23 @@ router.get('/checkIfBandExists/:bandName', async (req, res) => {
   } catch (e) {
     res.status(500);
     res.send('Error');
+  }
+}); */
+
+// MY CODE
+router.get('/getAllBands', async (req, res) => {
+  try {
+    const results = await dbCommands.getAllBandsAndCompetencies();
+    res.send(results);
+    res.status(200);
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
   }
 });
 

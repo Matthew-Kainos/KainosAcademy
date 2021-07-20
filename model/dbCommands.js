@@ -120,23 +120,33 @@ exports.getAllFamiliesWithCapability = async () => {
   }
 };
 
-// MY CODE
-exports.getCompentenciesBasesOnBand = async (bandName) => {
+// MY CODE- MIGHT NEED DELETED
+exports.getCompetenciesBasedOnBand = async (bandName) => {
   try {
     return await db.query(
       'SELECT Name, Competencies FROM Band WHERE Name = ?;', bandName,
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
+    throw new DatabaseError(`Error calling getCompetenciesBasedOnBand with message: ${e.message}`);
   }
 };
-// MY CODE
-exports.checkIfBandExists = async (bandName) => {
+// MY CODE- MAY NOT BE NEEDED
+/* exports.checkIfBandExists = async (bandName) => {
   try {
     return await db.query(
       'SELECT * FROM Band WHERE Name = ? LIMIT 10;', bandName,
     );
   } catch (e) {
     throw new DatabaseError(`Error calling checkIfBandExists with message: ${e.message}`);
+  }
+}; */
+
+exports.getAllBandsAndCompetencies = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM Band',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getAllBands with message: ${e.message}`);
   }
 };

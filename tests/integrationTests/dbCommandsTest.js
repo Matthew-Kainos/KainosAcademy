@@ -24,7 +24,7 @@ const bandTestDetails = {
   name: 'TestName',
   level: 1,
   training: 'TestTraining',
-  compentencies: 'TestCompetencies',
+  competencies: 'TestCompetencies',
   responsibilities: 'TestResponsibilities',
 };
 
@@ -33,7 +33,7 @@ const additionalBandTestDetails = {
   name: 'TestNameBandTwo',
   level: 2,
   training: 'TestTraining',
-  compentencies: 'TestCompetencies',
+  competencies: 'TestCompetencies',
   responsibilities: 'TestResponsibilities',
 };
 
@@ -274,6 +274,23 @@ describe('dbCommands', async () => {
       const result = await dbCommands.getAllFamiliesWithCapability();
       expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
       expect(result[result.length - 1].Job_Family).equal(capabilityTestDetails.jobFamily);
+    });
+  });
+
+  // MY CODE FIX
+  describe('getAllBandsAndCompetencies', async () => {
+    it('Should successfully return Competencies based on Band', async () => {
+      const result = await dbCommands.getAllBandsAndCompetencies(bandTestDetails.name);
+      expect(result[0].Name).equal(bandTestDetails.name);
+      expect(result[0].Competencies).equal(bandTestDetails.competencies);
+    });
+    it('Should successfully throw Database Error if connection', async () => {
+      try {
+        await dbCommands.getAllBandsAndCompetencies(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getAllBandsAndCompetencies with message');
+      }
     });
   });
 });
