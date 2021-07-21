@@ -177,3 +177,13 @@ exports.checkInsertFamily = async (name) => {
     throw new DatabaseError(`Error calling checkInsertFamily with message: ${e.message}`);
   }
 };
+
+exports.deleteARole = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM JobRoles WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling deleteARole with message: ${e.message}`);
+  }
+};

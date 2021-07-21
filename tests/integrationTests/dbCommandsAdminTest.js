@@ -186,4 +186,28 @@ describe('dbCommandsAdmin', async () => {
       }
     });
   });
+
+  describe('deleteARole', async () => {
+    it('Should successfully delete a role', async () => {
+      const newRoleDetails = {
+        roleName: 'TestRole2',
+        specSum: 'mySum',
+        specLink: 'link',
+        capId: capabilityTestDetails.capId,
+        bandId: bandTestDetails.bandId,
+      };
+      await dbCommandsAdmin.addNewRole(newRoleDetails);
+      await dbCommandsAdmin.deleteARole(newRoleDetails.roleName);
+      const result = await dbCommandsAdmin.checkIfUserExists(newRoleDetails.roleName);
+      expect(result.length).to.equal(0);
+    });
+    it('Should successfully throw Database Error is error occurs in database', async () => {
+      try {
+        await dbCommandsAdmin.deleteARole(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling deleteARole with message');
+      }
+    });
+  });
 });
