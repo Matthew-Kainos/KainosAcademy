@@ -299,23 +299,26 @@ describe('dbCommands', async () => {
       expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
     });
   });
-});
 
-describe('checkIfFamilyExists', async () => {
-  it('Should successfully return family details if family exists using full name to query', async () => {
-    const result = await dbCommands.checkIfFamilyExists(familyTestDetails.name);
-    expect(result[0].Name).equal(familyTestDetails.name);
-  });
-  it('Should successfully return empty result if family name is not valid', async () => {
-    const result = await dbCommands.checkIfFamilyExists('abc');
-    expect(result.length).equal(0);
-  });
-  it('Should successfully throw Database Error if error occured in database', async () => {
-    try {
-      await dbCommands.checkIfFamilyExists(null);
-    } catch (e) {
-      expect(e instanceof DatabaseError).equal(true);
-      expect(e.message).to.include('Error calling checkIfFamilyExists with message');
-    }
+  describe('checkIfFamilyExists', async () => {
+    it('Should successfully return family details if family exists using full name to query', async () => {
+      const result = await dbCommands.checkIfFamilyExists(familyTestDetails.name);
+      console.log(familyTestDetails.name);
+      const result2 = await dbCommands.selectAllFamily();
+      console.log(result2);
+      expect(result[0].Name).equal(familyTestDetails.name);
+    });
+    it('Should successfully return empty result if family name is not valid', async () => {
+      const result = await dbCommands.checkIfFamilyExists('abc');
+      expect(result.length).equal(0);
+    });
+    it('Should successfully throw Database Error if error occured in database', async () => {
+      try {
+        await dbCommands.checkIfFamilyExists(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling checkIfFamilyExists with message');
+      }
+    });
   });
 });

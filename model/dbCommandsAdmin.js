@@ -115,6 +115,16 @@ exports.getBandIdFromName = async (bandName) => {
   }
 };
 
+exports.getFamilyIdFromName = async (familyName) => {
+  try {
+    return await db.query(
+      'SELECT Family_ID FROM Family WHERE Name = ?', familyName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getFamilyIdFromName with message: ${e.message}`);
+  }
+};
+
 exports.checkInsertRole = async (name) => {
   try {
     return await db.query(
@@ -129,7 +139,7 @@ exports.addNewFamily = async (familyDetails) => {
   try {
     return await db.query(
       'INSERT INTO GroupBSprint.Family(Name, LeadName, LeadMessage, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?)',
-      [familyDetails.familyName,
+      [familyDetails.Name,
         familyDetails.leadName,
         familyDetails.leadMessage,
         familyDetails.leadImage,
@@ -141,18 +151,29 @@ exports.addNewFamily = async (familyDetails) => {
   }
 };
 
-exports.deleteJobFamily = async (familyDetails) => {
+// exports.deleteJobFamily = async (familyDetails) => {
+//   try {
+//     return await db.query(
+// eslint-disable-next-line max-len
+// 'DELETE FROM GroupBSprint.Family(Family_ID, Name, LeadName, LeadMessege, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?, ?)',
+//       [familyDetails.familyId,
+//         familyDetails.familyName,
+//         familyDetails.leadName,
+//         familyDetails.leadMessage,
+//         familyDetails.leadImage,
+//         familyDetails.capId],
+//     );
+//   } catch (e) {
+//     throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
+//   }
+// };
+
+exports.checkInsertFamily = async (name) => {
   try {
     return await db.query(
-      'DELETE FROM GroupBSprint.Family(Family_ID, Name, LeadName, LeadMessege, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?, ?)',
-      [familyDetails.familyId,
-        familyDetails.familyName,
-        familyDetails.leadName,
-        familyDetails.leadMessage,
-        familyDetails.leadImage,
-        familyDetails.capId],
+      'SELECT * FROM Family WHERE Name = ?', name,
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
+    throw new DatabaseError(`Error calling checkInsertFamily with message: ${e.message}`);
   }
 };
