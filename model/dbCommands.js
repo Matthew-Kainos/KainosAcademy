@@ -71,7 +71,7 @@ exports.getCapabilitiesBasedOnJobName = async (name) => {
 exports.getAllJobsWithCapability = async () => {
   try {
     return await db.query(
-      'SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id ORDER BY Role_ID;',
+      'SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities RIGHT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id ORDER BY Role_ID;',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);

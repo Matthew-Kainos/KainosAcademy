@@ -38,4 +38,30 @@ router.post('/role', async (req, res) => {
   }
 });
 
+router.post('/capability', async (req, res) => {
+  try {
+    const { newCapabilityDetails } = req.body;
+    const results = await dbCommands.checkIfCapabilityExists(newCapabilityDetails.Name);
+    if (results.length === 0) {
+      const capabilityDetails = {
+        name: newCapabilityDetails.Name,
+      };
+      await dbCommandsAdmin.addNewCapability(capabilityDetails);
+      res.send({ success: true, message: `New Capability ${capabilityDetails.name} Added` });
+      res.status(200);
+    } else {
+      res.send({ success: false, message: 'Unable to add Capability due to Duplicate Capability Name' });
+      res.status(400);
+    }
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+});
+
 module.exports = router;

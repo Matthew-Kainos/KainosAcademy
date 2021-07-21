@@ -79,6 +79,18 @@ exports.getAllCapabilityNames = async () => {
   }
 };
 
+exports.addNewCapability = async (capabilityDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO Capabilities (Name) values (?)', [
+        capabilityDetails.name,
+      ],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling addNewCapability with message: ${e.message}`);
+  }
+};
+
 exports.addNewRole = async (jobRoleDetails) => {
   try {
     return await db.query(
@@ -90,8 +102,7 @@ exports.addNewRole = async (jobRoleDetails) => {
         jobRoleDetails.bandId],
     );
   } catch (e) {
-    console.log(e);
-    throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
+    throw new DatabaseError(`Error calling addNewRole with message: ${e.message}`);
   }
 };
 
@@ -122,6 +133,16 @@ exports.checkInsertRole = async (name) => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling checkInsertRole with message: ${e.message}`);
+  }
+};
+
+exports.checkInsertCapability = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Capabilities WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkInsertCapability with message: ${e.message}`);
   }
 };
 
