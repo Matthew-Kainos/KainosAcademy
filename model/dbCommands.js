@@ -71,7 +71,7 @@ exports.getCapabilitiesBasedOnJobName = async (name) => {
 exports.getAllJobsWithCapability = async () => {
   try {
     return await db.query(
-      'SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id ORDER BY Role_ID;',
+      'SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities RIGHT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id ORDER BY Role_ID;',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
@@ -85,6 +85,38 @@ exports.checkIfJobExists = async (name) => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling checkIfJobExists with message: ${e.message}`);
+  }
+};
+
+exports.checkIfBandExists = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Band WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkIfBandExists with message: ${e.message}`);
+  }
+};
+
+exports.getBandID = async (bandName) => {
+  try {
+    return await db.query(
+      'SELECT Band_ID FROM Band WHERE Name = ?',
+      [bandName],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandID with message: ${e.message}`);
+  }
+};
+
+exports.getTrainingID = async (trainingName) => {
+  try {
+    return await db.query(
+      'SELECT Train_ID FROM Training WHERE Name = ?',
+      [trainingName],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getTrainingID with message: ${e.message}`);
   }
 };
 
@@ -143,7 +175,7 @@ exports.getJobSpec = async (roleID) => {
 exports.getAllFamiliesWithCapability = async () => {
   try {
     return await db.query(
-      'SELECT Family.Family_ID, Capabilities.Name AS Name, Family.Name AS Job_Family, Capabilities.cap_ID FROM Capabilities, Family WHERE Capabilities.cap_ID = Family.Cap_ID ORDER BY Family.Name;',
+      'SELECT Capabilities.Name AS Name, Family.Name AS Job_Family FROM Capabilities RIGHT JOIN Family ON Capabilities.Cap_ID = Family.Cap_ID ORDER BY Family.Name;',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllFamiliesWithCapability with message: ${e.message}`);
@@ -212,27 +244,13 @@ exports.getAllBandNames = async () => {
   }
 };
 
-exports.addJobFamily = async (data) => {
+exports.checkIfFamilyExists = async (familyName) => {
   try {
     return await db.query(
-      'INSERT INTO GroupBSprint.Family(Name)'
-            + ' VALUES (?)',
-      [data.Name],
+      'SELECT * FROM Family WHERE Name = ?', familyName,
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling addJobFamily with message: ${e.message}`);
-  }
-};
-
-exports.deleteJobFamily = async (data) => {
-  try {
-    return await db.query(
-      'INSERT INTO GroupBSprint.Family(Family_ID, Name)'
-            + ' VALUES (?, ?)',
-      [data.Name],
-    );
-  } catch (e) {
-    throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
+    throw new DatabaseError(`Error calling checkIfFamilyExists with message: ${e.message}`);
   }
 };
 

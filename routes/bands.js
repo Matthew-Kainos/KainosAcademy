@@ -22,12 +22,29 @@ router.get('/getAllBandNames', async (req, res) => {
   }
 });
 
-router.get('/addBand', (req, res) => {
+router.get('/info', async (req, res) => {
   try {
-    console.log(req.body);
+    const bandNames = await dbCommandsAdmin.getBandNames();
+    const Names = bandNames.map((element) => element.Name);
+    const bandComp = await dbCommandsAdmin.getCompetencies();
+    const Competencies = bandComp.map((element) => element.Name);
+    const bandTraining = await dbCommandsAdmin.getTraining();
+    const Training = bandTraining.map((element) => element.Name);
+    const results = {
+      names: Names,
+      competencies: Competencies,
+      training: Training,
+    };
+    res.send(results);
+    res.status(200);
   } catch (e) {
     res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
     res.send('Error');
+    console.error(e.message);
   }
 });
 // MY CODE- MIGHT NEED DELETED

@@ -79,6 +79,18 @@ exports.getAllCapabilityNames = async () => {
   }
 };
 
+exports.addNewCapability = async (capabilityDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO Capabilities (Name) values (?)', [
+        capabilityDetails.name,
+      ],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling addNewCapability with message: ${e.message}`);
+  }
+};
+
 exports.addNewRole = async (jobRoleDetails) => {
   try {
     return await db.query(
@@ -90,8 +102,7 @@ exports.addNewRole = async (jobRoleDetails) => {
         jobRoleDetails.bandId],
     );
   } catch (e) {
-    console.log(e);
-    throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
+    throw new DatabaseError(`Error calling addNewRole with message: ${e.message}`);
   }
 };
 
@@ -115,6 +126,16 @@ exports.getBandIdFromName = async (bandName) => {
   }
 };
 
+exports.getFamilyIdFromName = async (familyName) => {
+  try {
+    return await db.query(
+      'SELECT Family_ID FROM Family WHERE Name = ?', familyName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getFamilyIdFromName with message: ${e.message}`);
+  }
+};
+
 exports.checkInsertRole = async (name) => {
   try {
     return await db.query(
@@ -122,6 +143,117 @@ exports.checkInsertRole = async (name) => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling checkInsertRole with message: ${e.message}`);
+  }
+};
+
+exports.addBand = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Band(Name, Level, Training, Competencies, Responsibilities)'
+            + ' VALUES (?, ?, ?, ?, ?)',
+      [data.Name, data.Level, data.Training, data.Competencies, data.Responsibilities],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling addBand with message: ${e.message}`);
+  }
+};
+
+exports.updateBandLevels = async (bandLevel) => {
+  try {
+    return await db.query(
+      'UPDATE Band SET Level=Level+1 WHERE Level >= ?',
+      [bandLevel],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling updateBandLevels with message: ${e.message}`);
+  }
+};
+
+exports.getBandLevel = async (Name) => {
+  try {
+    return await db.query(
+      'SELECT Level FROM Band WHERE Name = ?',
+      [Name],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandLevel with message: ${e.message}`);
+  }
+};
+
+exports.getBandNames = async () => {
+  try {
+    return await db.query(
+      'SELECT DISTINCT Name FROM Band ORDER BY Level',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandNames with message: ${e.message}`);
+  }
+};
+
+exports.getCompetencies = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM CompetencyLevel;',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getCompetencies with message: ${e.message}`);
+  }
+};
+
+exports.getTraining = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM Training',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getTraining with message: ${e.message}`);
+  }
+};
+
+exports.setTrainingForBand = async (trainingID, bandID) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Band_Training(Train_ID, Band_ID) VALUES (?, ?)',
+      [trainingID, bandID],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling setTrainingForBand with message: ${e.message}`);
+  }
+};
+
+exports.checkInsertCapability = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Capabilities WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkInsertCapability with message: ${e.message}`);
+  }
+};
+
+exports.addNewFamily = async (familyDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Name, LeadName, LeadMessage, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?)',
+      [familyDetails.familyName,
+        familyDetails.leadName,
+        familyDetails.leadMessage,
+        familyDetails.leadImage,
+        familyDetails.capId],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling addNewFamily with message: ${e.message}`);
+  }
+};
+
+exports.checkInsertFamily = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Family WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkInsertFamily with message: ${e.message}`);
   }
 };
 

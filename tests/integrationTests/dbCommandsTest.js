@@ -47,6 +47,10 @@ const competenciesTestDetails = {
 const capabilityTestDetails = {
   capId: 9000,
   name: 'TestName',
+  // leadName: 'TestLeadName',
+  // leadMessage: 'TestLeadMessage',
+  // leadImage: 'TestImagePath',
+  // capId: capabilityTestDetails.capId,
 };
 
 const familyTestDetails = {
@@ -76,6 +80,11 @@ const additionalJobRoleTestDetails = {
   bandId: additionalBandTestDetails.bandId,
 };
 
+const trainingTestDetails = {
+  TrainId: 9010,
+  Name: 'TestTrainingCourse',
+};
+
 describe('dbCommands', async () => {
   beforeEach(async () => {
     await testDatabaseCommands.testInsertUser(userTestDetails);
@@ -86,6 +95,7 @@ describe('dbCommands', async () => {
     await testDatabaseCommands.testInsertBand(additionalBandTestDetails);
     await testDatabaseCommands.testInsertJobRole(jobRoleTestDetails);
     await testDatabaseCommands.testInsertJobRole(additionalJobRoleTestDetails);
+    await testDatabaseCommands.testInsertTraining(trainingTestDetails);
   });
 
   afterEach(async () => {
@@ -97,6 +107,7 @@ describe('dbCommands', async () => {
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
     await testDatabaseCommands.testDeleteBand(additionalBandTestDetails.name);
     await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
+    await testDatabaseCommands.testDeleteTraining(trainingTestDetails.Name);
   });
 
   describe('getRoleAndBandDB', async () => {
@@ -149,6 +160,65 @@ describe('dbCommands', async () => {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling checkIfJobExists with message');
       }
+    });
+  });
+
+  describe('addBandTests', async () => {
+    describe('checkIfBandExists', async () => {
+      it('Should successfully return band details if band exists using full name to query', async () => {
+        const result = await dbCommands.checkIfBandExists(bandTestDetails.name);
+        expect(result[0].Name).equal(bandTestDetails.name);
+      });
+      it('Should successfully return empty result if band name is not valid', async () => {
+        const result = await dbCommands.checkIfBandExists('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.checkIfBandExists(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling checkIfBandExists with message');
+        }
+      });
+    });
+
+    describe('getBandID', async () => {
+      it('Should successfully return band ID if band exists using full name to query', async () => {
+        const result = await dbCommands.getBandID(bandTestDetails.name);
+        expect(result[0].Band_ID).equal(bandTestDetails.bandId);
+      });
+      it('Should successfully return empty result if band name is not valid', async () => {
+        const result = await dbCommands.getBandID('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.getBandID(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getBandID with message');
+        }
+      });
+    });
+
+    describe('getTrainingID', async () => {
+      it('Should successfully return training ID if band exists using full name to query', async () => {
+        const result = await dbCommands.getTrainingID(trainingTestDetails.Name);
+        expect(result[0].Train_ID).equal(trainingTestDetails.TrainId);
+      });
+      it('Should successfully return empty result if band name is not valid', async () => {
+        const result = await dbCommands.getTrainingID('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.getTrainingID(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getTrainingID with message');
+        }
+      });
     });
   });
 
@@ -208,111 +278,133 @@ describe('dbCommands', async () => {
       expect(result[result.length - 1].CapabilityName).equal(capabilityTestDetails.name);
       expect(result[result.length - 1].JobRoleName).equal(additionalJobRoleTestDetails.name);
     });
-  });
 
-  describe('getJobSpec', async () => {
-    it('Should successfully return the Job Specefication Name, ID, Specification Summary and Specification link based on Job Role Id', async () => {
-      const result = await dbCommands.getJobSpec(jobRoleTestDetails.roleId);
-      expect(result[0].Name).equal(jobRoleTestDetails.name);
-      expect(result[0].Spec_Sum).equal(jobRoleTestDetails.specSum);
-      expect(result[0].Spec_Link).equal(jobRoleTestDetails.specLink);
+    describe('getJobSpec', async () => {
+      it('Should successfully return the Job Specefication Name, ID, Specification Summary and Specification link based on Job Role Id', async () => {
+        const result = await dbCommands.getJobSpec(jobRoleTestDetails.roleId);
+        expect(result[0].Name).equal(jobRoleTestDetails.name);
+        expect(result[0].Spec_Sum).equal(jobRoleTestDetails.specSum);
+        expect(result[0].Spec_Link).equal(jobRoleTestDetails.specLink);
+      });
+      it('Should successfully throw Database Error if connection', async () => {
+        try {
+          await dbCommands.getJobSpec(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getJobSpec with message');
+        }
+      });
     });
-    it('Should successfully throw Database Error if connection', async () => {
-      try {
-        await dbCommands.getJobSpec(null);
-      } catch (e) {
-        expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getJobSpec with message');
-      }
-    });
-  });
-  describe('checkIfUserExists', async () => {
-    it('Should successfully return the Username if User exists', async () => {
-      const result = await dbCommandsAdmin.checkIfUserExists(userTestDetails.username);
-      expect(result.length).equal(1);
-      expect(result[0].Username).equal(userTestDetails.username);
-    });
+    describe('checkIfUserExists', async () => {
+      it('Should successfully return the Username if User exists', async () => {
+        const result = await dbCommandsAdmin.checkIfUserExists(userTestDetails.username);
+        expect(result.length).equal(1);
+        expect(result[0].Username).equal(userTestDetails.username);
+      });
 
-    it('Should successfully throw Database Error if db error occured', async () => {
-      try {
-        await dbCommandsAdmin.checkIfUserExists(null);
-      } catch (e) {
-        expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling checkIfUserExists with message');
-      }
-    });
-  });
-
-  describe('getUsersPassword', async () => {
-    it('Should successfully return the Password of User', async () => {
-      const result = await dbCommandsAdmin.getUsersPassword(userTestDetails.username);
-      expect(result.length).equal(1);
-      expect(result[0].Password).equal(userTestDetails.password);
+      it('Should successfully throw Database Error if db error occured', async () => {
+        try {
+          await dbCommandsAdmin.checkIfUserExists(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling checkIfUserExists with message');
+        }
+      });
     });
 
-    it('Should successfully throw Database Error if db error occured', async () => {
-      try {
-        await dbCommandsAdmin.getUsersPassword(null);
-      } catch (e) {
-        expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getUsersPassword with message');
-      }
+    describe('getUsersPassword', async () => {
+      it('Should successfully return the Password of User', async () => {
+        const result = await dbCommandsAdmin.getUsersPassword(userTestDetails.username);
+        expect(result.length).equal(1);
+        expect(result[0].Password).equal(userTestDetails.password);
+      });
+
+      it('Should successfully throw Database Error if db error occured', async () => {
+        try {
+          await dbCommandsAdmin.getUsersPassword(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getUsersPassword with message');
+        }
+      });
     });
-  });
-  describe('checkIfAdmin', async () => {
-    it('Should successfully return details if user an admin', async () => {
-      const result = await dbCommandsAdmin.checkIfAdmin(adminUserTestDetails.username);
-      expect(result.length).equal(1);
-      expect(result[0].Username).equal(adminUserTestDetails.username);
-      expect(result[0].Password).equal(adminUserTestDetails.password);
-      expect(result[0].isAdmin).equal(1);
+    describe('checkIfAdmin', async () => {
+      it('Should successfully return details if user an admin', async () => {
+        const result = await dbCommandsAdmin.checkIfAdmin(adminUserTestDetails.username);
+        expect(result.length).equal(1);
+        expect(result[0].Username).equal(adminUserTestDetails.username);
+        expect(result[0].Password).equal(adminUserTestDetails.password);
+        expect(result[0].isAdmin).equal(1);
+      });
+
+      it('Should successfully return no results if user an is not an admin', async () => {
+        const result = await dbCommandsAdmin.checkIfAdmin(userTestDetails.username);
+        expect(result.length).equal(0);
+      });
+
+      it('Should successfully throw Database Error if db error occured', async () => {
+        try {
+          await dbCommandsAdmin.checkIfAdmin(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getUsersPassword with message');
+        }
+      });
     });
 
-    it('Should successfully return no results if user an is not an admin', async () => {
-      const result = await dbCommandsAdmin.checkIfAdmin(userTestDetails.username);
-      expect(result.length).equal(0);
+    describe('getAllFamiliesWithCapability', async () => {
+      it('Should successfully return all families with the relevant Capability Name', async () => {
+        const result = await dbCommands.getAllFamiliesWithCapability();
+        expect(result.find((x) => x.Name == capabilityTestDetails.name).Name).equal(capabilityTestDetails.name);
+        expect(result.find((x) => x.Job_Family == familyTestDetails.name).Job_Family).equal(familyTestDetails.name);
+      });
     });
 
-    it('Should successfully throw Database Error if db error occured', async () => {
-      try {
-        await dbCommandsAdmin.checkIfAdmin(null);
-      } catch (e) {
-        expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getUsersPassword with message');
-      }
+    describe('getCapabilityLead', async () => {
+      it('Should successfully return information about the capability lead', async () => {
+        const result = await dbCommands.getCapabilityLead(familyTestDetails.familyId);
+        expect(result[result.length - 1].LeadName).equal(familyTestDetails.leadName);
+        expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
+      });
     });
-  });
 
-  describe('getAllFamiliesWithCapability', async () => {
-    it('Should successfully return all families with the relevant Capability Name', async () => {
-      const result = await dbCommands.getAllFamiliesWithCapability();
-      expect(result.find((x) => x.Name == capabilityTestDetails.name).Name).equal(capabilityTestDetails.name);
-      expect(result.find((x) => x.Job_Family == familyTestDetails.name).Job_Family).equal(familyTestDetails.name);
+    // MY CODE FIX
+    describe('getAllBandsAndCompetencies', async () => {
+      it('Should successfully return Competencies based on Band', async () => {
+        const result = await dbCommands.getAllBandsAndCompetencies(bandTestDetails.name);
+        expect(result[0].Name).equal(bandTestDetails.name);
+        expect(result[0].Name).equal(competenciesTestDetails.name);
+      });
+      it('Should successfully throw Database Error if connection', async () => {
+        try {
+          await dbCommands.getAllBandsAndCompetencies(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getAllBandsAndCompetencies with message');
+        }
+      });
     });
-  });
 
-  describe('getCapabilityLead', async () => {
-    it('Should successfully return information about the capability lead', async () => {
-      const result = await dbCommands.getCapabilityLead(familyTestDetails.familyId);
-      expect(result[result.length - 1].LeadName).equal(familyTestDetails.leadName);
-      expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
-    });
-  });
-
-  // MY CODE FIX
-  describe('getAllBandsAndCompetencies', async () => {
-    it('Should successfully return Competencies based on Band', async () => {
-      const result = await dbCommands.getAllBandsAndCompetencies(bandTestDetails.name);
-      expect(result[0].Name).equal(bandTestDetails.name);
-      expect(result[0].Name).equal(competenciesTestDetails.name);
-    });
-    it('Should successfully throw Database Error if connection', async () => {
-      try {
-        await dbCommands.getAllBandsAndCompetencies(null);
-      } catch (e) {
-        expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getAllBandsAndCompetencies with message');
-      }
+    describe('checkIfFamilyExists', async () => {
+      it('Should successfully return family details if family exists using full name to query', async () => {
+        const result = await dbCommands.checkIfFamilyExists(familyTestDetails.name);
+        console.log(familyTestDetails.name);
+        const result2 = await dbCommands.selectAllFamily();
+        console.log(result2);
+        expect(result[0].Name).equal(familyTestDetails.name);
+      });
+      it('Should successfully return empty result if family name is not valid', async () => {
+        const result = await dbCommands.checkIfFamilyExists('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.checkIfFamilyExists(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling checkIfFamilyExists with message');
+        }
+      });
     });
   });
 });
