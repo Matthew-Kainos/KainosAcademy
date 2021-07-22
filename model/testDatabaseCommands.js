@@ -1,13 +1,22 @@
+/* eslint-disable import/no-unresolved */
 const mysql = require('mysql');
 const util = require('util');
-const dbconfig = require('../dbconfig.json');
 const DatabaseError = require('../errors/DatabaseError');
+require('dotenv').config();
+
+const dbconfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  connectionLimit: process.env.DB_CON_LIMIT,
+  database: process.env.DB_DATABASE,
+};
 
 function wrapDB(dbConfig) {
   const pool = mysql.createPool(dbConfig);
   return {
     query(sql, args) {
-      console.log('in query in wrapper');
+      console.log('Executing Query');
       return util.promisify(pool.query)
         .call(pool, sql, args);
     },
@@ -20,18 +29,36 @@ function wrapDB(dbConfig) {
 
 const db = wrapDB(dbconfig);
 
+exports.testInsertUser = async (userTestDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO Users values (?,?,?)', [
+        userTestDetails.username,
+        userTestDetails.password,
+        userTestDetails.isAdmin,
+      ],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testInsertUser with message: ${e.message}`);
+  }
+};
+
+exports.testDeleteUser = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM Users WHERE Username = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteUser with message: ${e.message}`);
+  }
+};
+
 exports.testInsertCapability = async (capabilityTestDetails) => {
   try {
     return await db.query(
-
-      'INSERT INTO Capabilities values (?, ?, ?, ?, ?, ?, ?)', [
+      'INSERT INTO Capabilities values (?, ?)', [
         capabilityTestDetails.capId,
-        capabilityTestDetails.name,
-        capabilityTestDetails.jobFamily,
-        capabilityTestDetails.leadName,
-        capabilityTestDetails.leadMessage,
-        capabilityTestDetails.familyId,
-        capabilityTestDetails.leadImage],
+        capabilityTestDetails.name],
     );
   } catch (e) {
     throw new DatabaseError(`Error calling testInsertCapability with message: ${e.message}`);
@@ -79,9 +106,13 @@ exports.testDeleteJobRole = async (name) => {
 exports.testInsertFamily = async (familyTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO Family values (?, ?)', [
+      'INSERT INTO Family values (?, ?, ?, ?, ?, ?)', [
         familyTestDetails.familyId,
-        familyTestDetails.name],
+        familyTestDetails.name,
+        familyTestDetails.leadName,
+        familyTestDetails.leadMessage,
+        familyTestDetails.leadImage,
+        familyTestDetails.capId],
     );
   } catch (e) {
     console.log(e);

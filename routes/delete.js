@@ -1,13 +1,15 @@
 const express = require('express');
-const dbCommandsAdmin = require('../model/dbCommandsAdmin');
 
 const router = express.Router();
+const dbCommandsAdmin = require('../model/dbCommandsAdmin');
+
 const DatabaseError = require('../errors/DatabaseError');
 
-router.get('/getAllBandNames', async (req, res) => {
+router.delete('/role', async (req, res) => {
   try {
-    const results = await dbCommandsAdmin.getAllBandNames();
-    res.send(results);
+    const { RoleName } = req.body;
+    await dbCommandsAdmin.deleteARole(RoleName);
+    res.send({ success: true, message: `${RoleName} Successfully Deleted` });
     res.status(200);
   } catch (e) {
     res.status(500);
@@ -17,15 +19,6 @@ router.get('/getAllBandNames', async (req, res) => {
     }
     res.send('Error');
     console.error(e.message);
-  }
-});
-
-router.get('/addBand', (req, res) => {
-  try {
-    console.log(req.body);
-  } catch (e) {
-    res.status(500);
-    res.send('Error');
   }
 });
 

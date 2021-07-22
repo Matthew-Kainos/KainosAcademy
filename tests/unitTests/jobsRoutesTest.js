@@ -4,7 +4,7 @@ const { expect } = chai;
 
 // Test File
 // Delete when done
-describe('Name Of Class', () => {
+describe('JobRoles', () => {
   describe('Name of Method', () => {
     it('Name of Test Success', () => {
       expect([1, 2, 3].indexOf(4)).equal(-1);
