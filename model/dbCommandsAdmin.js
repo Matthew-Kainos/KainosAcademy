@@ -139,7 +139,7 @@ exports.addNewFamily = async (familyDetails) => {
   try {
     return await db.query(
       'INSERT INTO GroupBSprint.Family(Name, LeadName, LeadMessage, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?)',
-      [familyDetails.Name,
+      [familyDetails.familyName,
         familyDetails.leadName,
         familyDetails.leadMessage,
         familyDetails.leadImage,

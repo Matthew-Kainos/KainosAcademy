@@ -165,17 +165,17 @@ describe('dbCommandsAdmin', async () => {
   describe('addNewFamily', async () => {
     it('Should successfully add new job family ', async () => {
       const newFamilyDetails = {
-        Name: 'TestFamily2',
+        familyName: 'TestFamily2',
         leadName: 'leadName',
         leadMessage: 'message',
         leadImage: 'image',
         capId: capabilityTestDetails.capId,
       };
       await dbCommandsAdmin.addNewFamily(newFamilyDetails);
-      const result = await dbCommandsAdmin.checkInsertFamily(newFamilyDetails.Name);
+      const result = await dbCommandsAdmin.checkInsertFamily(newFamilyDetails.familyName);
       console.log(result);
-      expect(result[0].Name).to.equal(newFamilyDetails.Name);
-      await testDatabaseCommands.testDeleteFamily(newFamilyDetails.Name);
+      expect(result[0].Name).to.equal(newFamilyDetails.familyName);
+      await testDatabaseCommands.testDeleteFamily(newFamilyDetails.familyName);
     });
     it('Should successfully throw Database Error is error occurs in database', async () => {
       try {

@@ -51,6 +51,7 @@ router.post('/family', async (req, res) => {
         leadImage: newFamilyDetails.LeadImage,
         capId: capbailityId[0].Cap_ID,
       };
+      console.log(newFamilyDetails);
       await dbCommandsAdmin.addNewFamily(newFamily);
       res.send({ success: true, message: `New Family ${newFamilyDetails.FamilyName} Added` });
       res.status(200);
