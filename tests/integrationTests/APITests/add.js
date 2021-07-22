@@ -18,6 +18,10 @@ const newRoleDetails = {
   Band: 'FakeBand',
 };
 
+const newCapabilityDetails = {
+  Name: 'FakeCapability',
+};
+
 describe('Add', () => {
   describe('role', () => {
     it('Should return 200 with success message if new role added to database', async () => {
@@ -72,6 +76,55 @@ describe('Add', () => {
           expect(response.text).equal('Database Error');
         });
       checkIfJobExistsStub.restore();
+    });
+  });
+  describe('capability', () => {
+    it('Should return 200 with success message if new capability added to database', async () => {
+      const checkIfCapabilityExistsStub = sinon.stub(dbCommands, 'checkIfCapabilityExists');
+      const addNewCapabilityStub = sinon.stub(dbCommandsAdmin, 'addNewCapability');
+
+      checkIfCapabilityExistsStub.returns([]);
+      addNewCapabilityStub.returns({ success: true, message: `New Capability ${newCapabilityDetails.Name} Added` });
+
+      await request(app)
+        .post('/add/capability')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .send({ newCapabilityDetails })
+        .then((response) => {
+          expect(response.body.success).to.equal(true);
+          expect(response.body.message).to.equal(`New Capability ${newCapabilityDetails.Name} Added`);
+        });
+
+      checkIfCapabilityExistsStub.restore();
+      addNewCapabilityStub.restore();
+    });
+    it('Should return 400 with failure message if new role name a duplicate', async () => {
+      const checkIfCapabilityExistsStub = sinon.stub(dbCommands, 'checkIfCapabilityExists');
+      checkIfCapabilityExistsStub.returns([{ data: 'abc' }]);
+      await request(app)
+        .post('/add/capability')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .send({ newCapabilityDetails })
+        .then((response) => {
+          expect(response.body.success).to.equal(false);
+          expect(response.body.message).to.equal('Unable to add Capability due to Duplicate Capability Name');
+        });
+      checkIfCapabilityExistsStub.restore();
+    });
+    it('Should return 500 if there is a database error', () => {
+      const checkIfCapabilityExistsStub = sinon.stub(dbCommands, 'checkIfCapabilityExists');
+      checkIfCapabilityExistsStub.throws(new DatabaseError());
+      request(app)
+        .post('/add/capability')
+        .set('Accept', 'application/json')
+        .send({ newCapabilityDetails })
+        .expect(500)
+        .then((response) => {
+          expect(response.text).equal('Database Error');
+        });
+      checkIfCapabilityExistsStub.restore();
     });
   });
 });

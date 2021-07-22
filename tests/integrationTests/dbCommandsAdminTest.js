@@ -154,10 +154,13 @@ describe('dbCommandsAdmin', async () => {
     });
     it('Should successfully throw Database Error is error occurs in database', async () => {
       try {
-        await dbCommandsAdmin.getBandIdFromName(null);
+        const newCapabilityDetails = {
+          name: null,
+        };
+        await dbCommandsAdmin.addNewRole(newCapabilityDetails);
       } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getBandIdFromName with message');
+        expect(e.message).to.include('Error calling addNewRole with message');
       }
     });
   });
@@ -207,6 +210,28 @@ describe('dbCommandsAdmin', async () => {
       } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling deleteARole with message');
+      }
+    });
+  });
+  describe('addCapability', async () => {
+    it('Should successfully add new capability ', async () => {
+      const newCapabilityDetails = {
+        name: 'NewCapability',
+      };
+      await dbCommandsAdmin.addNewCapability(newCapabilityDetails);
+      const result = await dbCommandsAdmin.checkInsertCapability(newCapabilityDetails.name);
+      expect(result[0].Name).to.equal(newCapabilityDetails.name);
+    });
+    it('Should successfully throw Database Error is error occurs in database', async () => {
+      const newCapabilityDetails = {
+        name: 'NewCapability',
+      };
+      try {
+        await dbCommandsAdmin.addNewCapability(newCapabilityDetails);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling addNewCapability with message');
+        await testDatabaseCommands.testDeleteCapability(newCapabilityDetails.name);
       }
     });
   });

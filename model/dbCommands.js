@@ -71,7 +71,7 @@ exports.getCapabilitiesBasedOnJobName = async (name) => {
 exports.getAllJobsWithCapability = async () => {
   try {
     return await db.query(
-      'SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities LEFT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id ORDER BY Role_ID;',
+      'SELECT JobRoles.Name AS JobRoleName, Capabilities.cap_id, Capabilities.name AS CapabilityName FROM Capabilities RIGHT JOIN JobRoles ON Capabilities.cap_id = JobRoles.cap_id ORDER BY Role_ID;',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
@@ -143,7 +143,7 @@ exports.getJobSpec = async (roleID) => {
 exports.getAllFamiliesWithCapability = async () => {
   try {
     return await db.query(
-      'SELECT Family.Family_ID, Capabilities.Name AS Name, Family.Name AS Job_Family, Capabilities.cap_ID FROM Capabilities, Family WHERE Capabilities.cap_ID = Family.Cap_ID ORDER BY Family.Name;',
+      'SELECT Capabilities.Name AS Name, Family.Name AS Job_Family FROM Capabilities RIGHT JOIN Family ON Capabilities.Cap_ID = Family.Cap_ID ORDER BY Family.Name;',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
