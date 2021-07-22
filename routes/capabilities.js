@@ -20,74 +20,6 @@ router.get('/getAllCapabilityNames', async (req, res) => {
   }
 });
 
-router.get('/family/:capName', async (req, res) => {
-  try {
-    const { capName } = req.params;
-    const results = await dbCommands.getFamilyBasedOnCapability(capName);
-    res.send(results);
-    res.status(200);
-  } catch (e) {
-    res.status(500);
-    res.send('Error');
-    if (e instanceof DatabaseError) {
-      res.send('Database Error');
-      console.error(e.message);
-    }
-    res.send('Error');
-    console.error(e.message);
-  }
-});
-
-router.get('/findByJobId/:id', async (req, res) => {
-  try {
-    const jobId = req.params.id;
-    const results = await dbCommands.getCapabilitiesBasedOnJobId(jobId);
-    res.send(results);
-    res.status(200);
-  } catch (e) {
-    res.status(500);
-    if (e instanceof DatabaseError) {
-      res.send('Database Error');
-      console.error(e.message);
-    }
-    res.send('Error');
-    console.error(e.message);
-  }
-});
-
-router.get('/findByJobName/:jobName', async (req, res) => {
-  try {
-    const name = req.params.jobName;
-    const results = await dbCommands.getCapabilitiesBasedOnJobName(`%${name}%`);
-    res.send(results);
-    res.status(200);
-  } catch (e) {
-    res.status(500);
-    if (e instanceof DatabaseError) {
-      res.send('Database Error');
-      console.error(e.message);
-    }
-    res.send('Error');
-    console.error(e.message);
-  }
-});
-
-router.get('/checkIfCapabilityExists/:capName', async (req, res) => {
-  try {
-    const { capName } = req.params;
-    const results = await dbCommands.checkIfCapabilityExists(capName);
-    res.status(200);
-    if (results.length > 0) {
-      res.send(JSON.stringify(true));
-    } else {
-      res.send(JSON.stringify(false));
-    }
-  } catch (e) {
-    res.status(500);
-    res.send('Error');
-  }
-});
-
 router.get('/getAllFamiliesWithCapability', async (req, res) => {
   try {
     const results = await dbCommands.getAllFamiliesWithCapability();
@@ -104,10 +36,10 @@ router.get('/getAllFamiliesWithCapability', async (req, res) => {
   }
 });
 
-router.get('/viewCapabilityLead/:capID', async (req, res) => {
+router.get('/viewCapabilityLead/:familyID', async (req, res) => {
   try {
-    const { capID } = req.params;
-    const results = await dbCommands.getCapabilityLead(capID);
+    const { familyID } = req.params;
+    const results = await dbCommands.getCapabilityLead(familyID);
     res.send(results);
     res.status(200);
   } catch (e) {

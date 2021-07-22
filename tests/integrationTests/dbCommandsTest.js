@@ -349,14 +349,12 @@ describe('dbCommands', async () => {
       const result = await dbCommands.getAllFamiliesWithCapability();
       expect(result.find((x) => x.Name == capabilityTestDetails.name).Name).equal(capabilityTestDetails.name);
       expect(result.find((x) => x.Job_Family == familyTestDetails.name).Job_Family).equal(familyTestDetails.name);
-      // expect(result[result.length - 1].Name).equal(capabilityTestDetails.name);
-      // expect(result[result.length - 1].Job_Family).equal(familyTestDetails.name);
     });
   });
 
   describe('getCapabilityLead', async () => {
     it('Should successfully return information about the capability lead', async () => {
-      const result = await dbCommands.getCapabilityLead(capabilityTestDetails.capId);
+      const result = await dbCommands.getCapabilityLead(familyTestDetails.familyId);
       expect(result[result.length - 1].LeadName).equal(familyTestDetails.leadName);
       expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
     });
