@@ -170,14 +170,45 @@ exports.getCompetenciesBasedOnBand = async (bandName) => {
     throw new DatabaseError(`Error calling checkIfBandExists with message: ${e.message}`);
   }
 }; */
-
+// dbCommands query to get competencies for a band GARETH CODE
+exports.getBandCompetencies = async (bandName) => {
+  try {
+    return await db.query(
+      'SELECT Competencies.Name FROM Band JOIN Band_Competencies USING(Band_ID) JOIN Competencies USING(Comp_ID) WHERE Band.Name = ?',
+      [bandName],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandCompetencies with message: ${e.message}`);
+  }
+};
+// NIAMH VERSION OF CODE
 exports.getAllBandsAndCompetencies = async () => {
   try {
     return await db.query(
-      'SELECT Band.Name AS BandName, Competencies.Name AS Competencies From Band, Competencies;',
+      'SELECT Band.Name AS BandName,Competencies.Name AS Competencies FROM Band JOIN Band_Competencies USING(Band_ID) JOIN Competencies USING(Comp_ID)',
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling getAllBands with message: ${e.message}`);
+    throw new DatabaseError(`Error calling getAllBandsAndCompetencies with message: ${e.message}`);
+  }
+};
+// MY CODE ADDED TUESDAY
+exports.getAllCompetencies = async () => {
+  try {
+    return await db.query(
+      'SELECT Competencies.Name AS Competencies FROM Competencies',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getAllCompetencies with message: ${e.message}`);
+  }
+};
+// MY CODE ?
+exports.getAllBandNames = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM Band',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getAllBandNames with message: ${e.message}`);
   }
 };
 

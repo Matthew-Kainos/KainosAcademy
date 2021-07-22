@@ -65,8 +65,8 @@ router.get('/competencies/:bandName', async (req, res) => {
   }
 }); */
 
-// MY CODE- USED
-router.get('/getAllBandsAndCompetencies', async (req, res) => {
+// MY CODE
+router.get('/getBandCompetencies', async (req, res) => {
   try {
     const results = await dbCommands.getAllBandsAndCompetencies();
     res.send(results);
@@ -81,5 +81,37 @@ router.get('/getAllBandsAndCompetencies', async (req, res) => {
     console.error(e.message);
   }
 });
+
+router.get('/getAllCompetencies', async (req, res) => {
+  try {
+    const results = await dbCommands.getAllCompetencies();
+    res.send(results);
+    res.status(200);
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+});
+
+/* router.get('/getAllBandNames', async (req, res) => {
+  try {
+    const results = await dbCommands.getAllBandNames();
+    res.send(results);
+    res.status(200);
+  } catch (e) {
+    res.status(500);
+    if (e instanceof DatabaseError) {
+      res.send('Database Error');
+      console.error(e.message);
+    }
+    res.send('Error');
+    console.error(e.message);
+  }
+}); */
 
 module.exports = router;
