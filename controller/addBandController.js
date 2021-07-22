@@ -5,7 +5,7 @@ exports.setTrainingforBand = async (newBandDetails, dbCommands, dbCommandsAdmin)
     await dbCommandsAdmin.setTrainingForBand(trainID[0].Train_ID, bandID[0].Band_ID);
   } else if (Array.isArray(newBandDetails.training)) {
     const bandID = await dbCommands.getBandID(newBandDetails.bandName);
-    for (let i = 0; i < newBandDetails.training.length; i++) {
+    for (let i = 0; i < newBandDetails.training.length; i += 1) {
       const trainID = await dbCommands.getTrainingID(newBandDetails.training[i]);
       await dbCommandsAdmin.setTrainingForBand(trainID[0].Train_ID, bandID[0].Band_ID);
     }
