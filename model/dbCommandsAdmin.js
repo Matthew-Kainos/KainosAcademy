@@ -151,23 +151,6 @@ exports.addNewFamily = async (familyDetails) => {
   }
 };
 
-// exports.deleteJobFamily = async (familyDetails) => {
-//   try {
-//     return await db.query(
-// eslint-disable-next-line max-len
-// 'DELETE FROM GroupBSprint.Family(Family_ID, Name, LeadName, LeadMessege, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?, ?)',
-//       [familyDetails.familyId,
-//         familyDetails.familyName,
-//         familyDetails.leadName,
-//         familyDetails.leadMessage,
-//         familyDetails.leadImage,
-//         familyDetails.capId],
-//     );
-//   } catch (e) {
-//     throw new DatabaseError(`Error calling deleteJobFamily with message: ${e.message}`);
-//   }
-// };
-
 exports.checkInsertFamily = async (name) => {
   try {
     return await db.query(
