@@ -391,11 +391,57 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Created user object",
+                        "description": "Created new role object",
                         "required": true,
                         "properties": {
                             "newRoleDetails": {
                                 "$ref": "#/definitions/newRoleDetails"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/addSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Input",
+                        "schema": {
+                            "$ref": "#/definitions/addFailure"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Error"
+                    }
+                }
+            }
+        },
+        "/add/capability": {
+            "post": {
+                "tags": [
+                    "add"
+                ],
+                "summary": "Adds Capabilities",
+                "description": "",
+                "operationId": "capability",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Created capability object",
+                        "required": true,
+                        "properties": {
+                            "newCapabilityDetails": {
+                                "$ref": "#/definitions/newCapabilityDetails"
                             }
                         }
                     }
@@ -600,6 +646,14 @@
                     "type": "string"
                 },
                 "Band": {
+                    "type": "string"
+                }
+            }
+        },
+        "newCapabilityDetails": {
+            "type": "object",
+            "properties": {
+                "Name": {
                     "type": "string"
                 }
             }

@@ -6,10 +6,12 @@
   "scripts": {
     "lint": "eslint '**/*.js'",
     "test": "mocha tests",
-    "integrationTests": "npm run lint && mocha tests/integrationTests --exit",
     "adminAddBandTests": "mocha tests/integrationTests/dbCommandsAdminTest.js -g 'addBandTests' --exit",
     "addBandTests": "mocha tests/integrationTests/dbCommandsTest.js -g 'addBandTests' --exit",
     "bandAPITests": "mocha tests/integrationTests/APITests/add.js -g 'Band' --exit",
+    "integrationTests": "npm run lint && mocha tests/integrationTests/dbCommandsTest --exit",
+    "integrationTestsAdmin": "npm run lint && mocha tests/integrationTests/dbCommandsAdminTest --exit",
+    "apiTests": "npm run lint && mocha tests/integrationTests/APITests --exit",
     "start": "nodemon app.js"
   },
   "repository": {

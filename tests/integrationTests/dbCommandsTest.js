@@ -42,6 +42,10 @@ const additionalBandTestDetails = {
 const capabilityTestDetails = {
   capId: 9000,
   name: 'TestName',
+  // leadName: 'TestLeadName',
+  // leadMessage: 'TestLeadMessage',
+  // leadImage: 'TestImagePath',
+  // capId: capabilityTestDetails.capId,
 };
 
 const familyTestDetails = {
@@ -357,6 +361,28 @@ describe('dbCommands', async () => {
       const result = await dbCommands.getCapabilityLead(familyTestDetails.familyId);
       expect(result[result.length - 1].LeadName).equal(familyTestDetails.leadName);
       expect(result[result.length - 1].LeadMessage).equal(familyTestDetails.leadMessage);
+    });
+  });
+
+  describe('checkIfFamilyExists', async () => {
+    it('Should successfully return family details if family exists using full name to query', async () => {
+      const result = await dbCommands.checkIfFamilyExists(familyTestDetails.name);
+      console.log(familyTestDetails.name);
+      const result2 = await dbCommands.selectAllFamily();
+      console.log(result2);
+      expect(result[0].Name).equal(familyTestDetails.name);
+    });
+    it('Should successfully return empty result if family name is not valid', async () => {
+      const result = await dbCommands.checkIfFamilyExists('abc');
+      expect(result.length).equal(0);
+    });
+    it('Should successfully throw Database Error if error occured in database', async () => {
+      try {
+        await dbCommands.checkIfFamilyExists(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling checkIfFamilyExists with message');
+      }
     });
   });
 });
