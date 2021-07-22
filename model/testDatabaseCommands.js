@@ -157,3 +157,78 @@ exports.testDeleteBand = async (name) => {
     throw new DatabaseError(`Error calling testDeleteBand with message: ${e.message}`);
   }
 };
+
+exports.testDeleteBandTraining = async (bandId) => {
+  try {
+    return await db.query(
+      'DELETE FROM Band_Training WHERE Band_ID = ?', bandId,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteBandTraining with message: ${e.message}`);
+  }
+};
+
+exports.testInsertTraining = async (trainingTestDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Training(Train_ID, Name) VALUES (?, ?)', [
+        trainingTestDetails.TrainId, trainingTestDetails.Name],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling testInsertTraining with message: ${e.message}`);
+  }
+};
+
+exports.testDeleteTraining = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM Training WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteTraining with message: ${e.message}`);
+  }
+};
+
+exports.testInsertCompetencyLevel = async (compLevelTestDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.CompetencyLevel(Name, EquivalentRole) values (?, ?)', [
+        compLevelTestDetails.Name,
+        compLevelTestDetails.EquivalentRole],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling testInsertCompetencyLevel with message: ${e.message}`);
+  }
+};
+
+exports.testDeleteCompetencyLevel = async (name) => {
+  try {
+    return await db.query(
+      'DELETE FROM CompetencyLevel WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteCompetencyLevel with message: ${e.message}`);
+  }
+};
+
+exports.testRestoreBandLevels = async () => {
+  try {
+    return await db.query(
+      'UPDATE Band SET Level=Band_ID-1',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testRestoreBandLevels with message: ${e.message}`);
+  }
+};
+
+exports.getBandTrainingTable = async () => {
+  try {
+    return await db.query(
+      'SELECT * FROM Band_Training',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandTrainingTable with message: ${e.message}`);
+  }
+};

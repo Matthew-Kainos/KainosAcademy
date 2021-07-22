@@ -24,18 +24,17 @@ const additionalBandTestDetails = {
   responsibilities: 'TestResponsibilities',
 };
 
-const familyTestDetails = {
-  familyId: 9000,
-  name: 'TestName',
-};
-
 const capabilityTestDetails = {
   capId: 9000,
   name: 'TestName',
-  jobFamily: 'TestJobFamily',
+};
+
+const familyTestDetails = {
+  familyId: 9000,
+  name: 'TestName',
   leadName: 'TestLeadName',
   leadMessage: 'TestLeadMessage',
-  familyId: familyTestDetails.familyId,
+  capId: capabilityTestDetails.capId,
   leadImage: 'TestImagePath',
 };
 
@@ -57,23 +56,41 @@ const additionalJobRoleTestDetails = {
   bandId: additionalBandTestDetails.bandId,
 };
 
+const trainingTestDetails = {
+  TrainId: 9010,
+  Name: 'TestTrainingCourse',
+};
+
+const competencyLevelTestDetails = {
+  TrainId: 9010,
+  Name: 'TestCompetencyLevel',
+  EquivalentRole: 'TestRoleName',
+};
+
 describe('dbCommandsAdmin', async () => {
   beforeEach(async () => {
+    await testDatabaseCommands.testInsertCapability(capabilityTestDetails);
     await testDatabaseCommands.testInsertFamily(familyTestDetails);
     await testDatabaseCommands.testInsertBand(bandTestDetails);
     await testDatabaseCommands.testInsertBand(additionalBandTestDetails);
-    await testDatabaseCommands.testInsertCapability(capabilityTestDetails);
     await testDatabaseCommands.testInsertJobRole(jobRoleTestDetails);
     await testDatabaseCommands.testInsertJobRole(additionalJobRoleTestDetails);
+    await testDatabaseCommands.testInsertTraining(trainingTestDetails);
+    await testDatabaseCommands.testInsertCompetencyLevel(competencyLevelTestDetails);
   });
 
   afterEach(async () => {
+    await testDatabaseCommands.testDeleteBandTraining(bandTestDetails.bandId);
     await testDatabaseCommands.testDeleteJobRole(additionalJobRoleTestDetails.name);
     await testDatabaseCommands.testDeleteJobRole(jobRoleTestDetails.name);
-    await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
     await testDatabaseCommands.testDeleteFamily(familyTestDetails.name);
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
     await testDatabaseCommands.testDeleteBand(additionalBandTestDetails.name);
+    await testDatabaseCommands.testDeleteBand('NewTestBandOneFour');
+    await testDatabaseCommands.testDeleteTraining(trainingTestDetails.Name);
+    await testDatabaseCommands.testDeleteCompetencyLevel(competencyLevelTestDetails.Name);
+    await testDatabaseCommands.testRestoreBandLevels();
+    await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
   });
 
   describe('getAllBandNames', async () => {
@@ -89,6 +106,122 @@ describe('dbCommandsAdmin', async () => {
       const result = await dbCommandsAdmin.getAllCapabilityNames();
       expect(result.length).to.greaterThan(0);
       expect(result[0].Name).to.be.an('string');
+    });
+  });
+
+  describe('addBandTests', async () => {
+    describe('getTraining', async () => {
+      it('Should successfully return the training courses available', async () => {
+        const result = await dbCommandsAdmin.getTraining();
+        expect(result.find((x) => x.Name === trainingTestDetails.Name).Name)
+          .equal(trainingTestDetails.Name);
+      });
+    });
+
+    describe('getCompetencies', async () => {
+      it('Should successfully return the competency names', async () => {
+        const result = await dbCommandsAdmin.getCompetencies();
+        expect(result.find((x) => x.Name === competencyLevelTestDetails.Name).Name)
+          .equal(competencyLevelTestDetails.Name);
+      });
+    });
+
+    describe('getBandNames', async () => {
+      it('Should successfully return the band names, no dupilcates', async () => {
+        const result = await dbCommandsAdmin.getBandNames();
+        expect(result.find((x) => x.Name === bandTestDetails.name).Name)
+          .equal(bandTestDetails.name);
+        expect(result.find((x) => x.Name === additionalBandTestDetails.name).Name)
+          .equal(additionalBandTestDetails.name);
+      });
+    });
+
+    describe('getBandLevel', async () => {
+      it('Should successfully return the band level for a given band', async () => {
+        const resultOne = await dbCommandsAdmin.getBandLevel(bandTestDetails.name);
+        const resultTwo = await dbCommandsAdmin.getBandLevel(additionalBandTestDetails.name);
+        expect(resultOne[0].Level).equal(bandTestDetails.level);
+        expect(resultTwo[0].Level).equal(additionalBandTestDetails.level);
+      });
+      it('Should return no data for invalid band name', async () => {
+        const result = await dbCommandsAdmin.getBandLevel('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommandsAdmin.getBandLevel(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getBandLevel with message');
+        }
+      });
+    });
+
+    describe('updateBandLevels', async () => {
+      it('Should successfully return the band level for a given band', async () => {
+        await dbCommandsAdmin.updateBandLevels(bandTestDetails.level);
+        const resultOne = await dbCommandsAdmin.getBandLevel(bandTestDetails.name);
+        const resultTwo = await dbCommandsAdmin.getBandLevel(additionalBandTestDetails.name);
+        expect(resultOne[0].Level).equal(bandTestDetails.level + 1);
+        expect(resultTwo[0].Level).equal(additionalBandTestDetails.level + 1);
+      });
+      it('Should successfully return the band level for a given band', async () => {
+        await dbCommandsAdmin.updateBandLevels(additionalBandTestDetails.level);
+        const resultOne = await dbCommandsAdmin.getBandLevel(bandTestDetails.name);
+        const resultTwo = await dbCommandsAdmin.getBandLevel(additionalBandTestDetails.name);
+        expect(resultOne[0].Level).equal(bandTestDetails.level);
+        expect(resultTwo[0].Level).equal(additionalBandTestDetails.level + 1);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommandsAdmin.updateBandLevels(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling updateBandLevels with message');
+        }
+      });
+    });
+
+    describe('setTrainingForBand', async () => {
+      it('Should successfully add training and band in band_training table', async () => {
+        await dbCommandsAdmin.setTrainingForBand(trainingTestDetails.TrainId,
+          bandTestDetails.bandId);
+        const results = await testDatabaseCommands.getBandTrainingTable();
+        expect(results.find((x) => x.Train_ID === trainingTestDetails.TrainId).Band_ID)
+          .equal(bandTestDetails.bandId);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommandsAdmin.setTrainingForBand(null, null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling setTrainingForBand with message');
+        }
+      });
+    });
+
+    describe('addBand', async () => {
+      it('Should successfully add new band ', async () => {
+        const newBandDetails = {
+          Name: 'NewTestBandOneFour',
+          Level: 3,
+          Training: 'TestTraining',
+          Competencies: 'TestCompetencies',
+          Responsibilities: 'TestResponsibilities',
+        };
+        await dbCommandsAdmin.addBand(newBandDetails);
+        const result = await dbCommandsAdmin.getBandNames();
+        expect(result.find((x) => x.Name === newBandDetails.Name).Name)
+          .equal(newBandDetails.Name);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommandsAdmin.addBand(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling addBand with message');
+        }
+      });
     });
   });
 
@@ -123,6 +256,22 @@ describe('dbCommandsAdmin', async () => {
       }
     });
   });
+
+  describe('getFamilyIdFromName', async () => {
+    it('Should successfully return the family id based on family name', async () => {
+      const result = await dbCommandsAdmin.getFamilyIdFromName(familyTestDetails.name);
+      expect(result.length).to.greaterThan(0);
+      expect(result[0].Family_ID).to.equal(familyTestDetails.familyId);
+    });
+    it('Should successfully throw db error if error occurs in database', async () => {
+      try {
+        await dbCommandsAdmin.getFamilyIdFromName(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getFamilyIdFromName with message');
+      }
+    });
+  });
   describe('addNewRole', async () => {
     it('Should successfully add new role ', async () => {
       const newRoleDetails = {
@@ -139,13 +288,42 @@ describe('dbCommandsAdmin', async () => {
     });
     it('Should successfully throw Database Error is error occurs in database', async () => {
       try {
-        await dbCommandsAdmin.getBandIdFromName(null);
+        const newCapabilityDetails = {
+          name: null,
+        };
+        await dbCommandsAdmin.addNewRole(newCapabilityDetails);
       } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
-        expect(e.message).to.include('Error calling getBandIdFromName with message');
+        expect(e.message).to.include('Error calling addNewRole with message');
       }
     });
   });
+
+  describe('addNewFamily', async () => {
+    it('Should successfully add new job family ', async () => {
+      const newFamilyDetails = {
+        familyName: 'TestFamily2',
+        leadName: 'leadName',
+        leadMessage: 'message',
+        leadImage: 'image',
+        capId: capabilityTestDetails.capId,
+      };
+      await dbCommandsAdmin.addNewFamily(newFamilyDetails);
+      const result = await dbCommandsAdmin.checkInsertFamily(newFamilyDetails.familyName);
+      console.log(result);
+      expect(result[0].Name).to.equal(newFamilyDetails.familyName);
+      await testDatabaseCommands.testDeleteFamily(newFamilyDetails.familyName);
+    });
+    it('Should successfully throw Database Error is error occurs in database', async () => {
+      try {
+        await dbCommandsAdmin.getFamilyIdFromName(null);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling getFamilyIdFromName with message');
+      }
+    });
+  });
+
   describe('deleteARole', async () => {
     it('Should successfully delete a role', async () => {
       const newRoleDetails = {
@@ -166,6 +344,28 @@ describe('dbCommandsAdmin', async () => {
       } catch (e) {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling deleteARole with message');
+      }
+    });
+  });
+  describe('addCapability', async () => {
+    it('Should successfully add new capability ', async () => {
+      const newCapabilityDetails = {
+        name: 'NewCapability',
+      };
+      await dbCommandsAdmin.addNewCapability(newCapabilityDetails);
+      const result = await dbCommandsAdmin.checkInsertCapability(newCapabilityDetails.name);
+      expect(result[0].Name).to.equal(newCapabilityDetails.name);
+    });
+    it('Should successfully throw Database Error is error occurs in database', async () => {
+      const newCapabilityDetails = {
+        name: 'NewCapability',
+      };
+      try {
+        await dbCommandsAdmin.addNewCapability(newCapabilityDetails);
+      } catch (e) {
+        expect(e instanceof DatabaseError).equal(true);
+        expect(e.message).to.include('Error calling addNewCapability with message');
+        await testDatabaseCommands.testDeleteCapability(newCapabilityDetails.name);
       }
     });
   });
