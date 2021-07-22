@@ -158,11 +158,21 @@ exports.testDeleteBand = async (name) => {
   }
 };
 
+exports.testDeleteBandTraining = async (bandId) => {
+  try {
+    return await db.query(
+      'DELETE FROM Band_Training WHERE Band_ID = ?', bandId,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testDeleteBandTraining with message: ${e.message}`);
+  }
+};
+
 exports.testInsertTraining = async (trainingTestDetails) => {
   try {
     return await db.query(
-      'INSERT INTO GroupBSprint.Training(Name) VALUES (?)', [
-        trainingTestDetails.Name],
+      'INSERT INTO GroupBSprint.Training(Train_ID, Name) VALUES (?, ?)', [
+        trainingTestDetails.TrainId, trainingTestDetails.Name],
     );
   } catch (e) {
     console.log(e);
@@ -200,5 +210,25 @@ exports.testDeleteCompetencyLevel = async (name) => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling testDeleteCompetencyLevel with message: ${e.message}`);
+  }
+};
+
+exports.testRestoreBandLevels = async () => {
+  try {
+    return await db.query(
+      'UPDATE Band SET Level=Band_ID-1',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling testRestoreBandLevels with message: ${e.message}`);
+  }
+};
+
+exports.getBandTrainingTable = async () => {
+  try {
+    return await db.query(
+      'SELECT * FROM Band_Training',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandTrainingTable with message: ${e.message}`);
   }
 };

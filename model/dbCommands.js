@@ -94,7 +94,7 @@ exports.checkIfBandExists = async (name) => {
       'SELECT * FROM Band WHERE Name = ?', name,
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling checkIfJobExists with message: ${e.message}`);
+    throw new DatabaseError(`Error calling checkIfBandExists with message: ${e.message}`);
   }
 };
 
