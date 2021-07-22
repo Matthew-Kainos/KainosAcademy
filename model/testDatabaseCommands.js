@@ -199,7 +199,7 @@ exports.testInsertCompetencyLevel = async (compLevelTestDetails) => {
     );
   } catch (e) {
     console.log(e);
-    throw new DatabaseError(`Error calling testInsertTraining with message: ${e.message}`);
+    throw new DatabaseError(`Error calling testInsertCompetencyLevel with message: ${e.message}`);
   }
 };
 
