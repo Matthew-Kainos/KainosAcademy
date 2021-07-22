@@ -174,10 +174,10 @@ describe('dbCommandsAdmin', async () => {
       });
       it('Should successfully throw Database Error if error occured in database', async () => {
         try {
-          await dbCommandsAdmin.getBandLevel(null);
+          await dbCommandsAdmin.updateBandLevels(null);
         } catch (e) {
           expect(e instanceof DatabaseError).equal(true);
-          expect(e.message).to.include('Error calling getBandLevel with message');
+          expect(e.message).to.include('Error calling updateBandLevels with message');
         }
       });
     });
@@ -216,10 +216,10 @@ describe('dbCommandsAdmin', async () => {
       });
       it('Should successfully throw Database Error if error occured in database', async () => {
         try {
-          await dbCommandsAdmin.getBandLevel(null);
+          await dbCommandsAdmin.addBand(null);
         } catch (e) {
           expect(e instanceof DatabaseError).equal(true);
-          expect(e.message).to.include('Error calling getBandLevel with message');
+          expect(e.message).to.include('Error calling addBand with message');
         }
       });
     });

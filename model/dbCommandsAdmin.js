@@ -165,7 +165,7 @@ exports.getBandNames = async () => {
       'SELECT DISTINCT Name FROM Band ORDER BY Level',
     );
   } catch (e) {
-    throw new DatabaseError(`Error calling getBandInfo with message: ${e.message}`);
+    throw new DatabaseError(`Error calling getBandNames with message: ${e.message}`);
   }
 };
 
