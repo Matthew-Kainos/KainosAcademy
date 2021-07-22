@@ -146,6 +146,81 @@ exports.checkInsertRole = async (name) => {
   }
 };
 
+exports.addBand = async (data) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Band(Name, Level, Training, Competencies, Responsibilities)'
+            + ' VALUES (?, ?, ?, ?, ?)',
+      [data.Name, data.Level, data.Training, data.Competencies, data.Responsibilities],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling addBand with message: ${e.message}`);
+  }
+};
+
+exports.updateBandLevels = async (bandLevel) => {
+  try {
+    return await db.query(
+      'UPDATE Band SET Level=Level+1 WHERE Level >= ?',
+      [bandLevel],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling updateBandLevels with message: ${e.message}`);
+  }
+};
+
+exports.getBandLevel = async (Name) => {
+  try {
+    return await db.query(
+      'SELECT Level FROM Band WHERE Name = ?',
+      [Name],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandLevel with message: ${e.message}`);
+  }
+};
+
+exports.getBandNames = async () => {
+  try {
+    return await db.query(
+      'SELECT DISTINCT Name FROM Band ORDER BY Level',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandNames with message: ${e.message}`);
+  }
+};
+
+exports.getCompetencies = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM CompetencyLevel;',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getCompetencies with message: ${e.message}`);
+  }
+};
+
+exports.getTraining = async () => {
+  try {
+    return await db.query(
+      'SELECT Name FROM Training',
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getTraining with message: ${e.message}`);
+  }
+};
+
+exports.setTrainingForBand = async (trainingID, bandID) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Band_Training(Train_ID, Band_ID) VALUES (?, ?)',
+      [trainingID, bandID],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling setTrainingForBand with message: ${e.message}`);
+  }
+};
+
 exports.checkInsertCapability = async (name) => {
   try {
     return await db.query(

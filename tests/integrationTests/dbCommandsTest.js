@@ -75,6 +75,11 @@ const additionalJobRoleTestDetails = {
   bandId: additionalBandTestDetails.bandId,
 };
 
+const trainingTestDetails = {
+  TrainId: 9010,
+  Name: 'TestTrainingCourse',
+};
+
 describe('dbCommands', async () => {
   beforeEach(async () => {
     await testDatabaseCommands.testInsertUser(userTestDetails);
@@ -85,6 +90,7 @@ describe('dbCommands', async () => {
     await testDatabaseCommands.testInsertBand(additionalBandTestDetails);
     await testDatabaseCommands.testInsertJobRole(jobRoleTestDetails);
     await testDatabaseCommands.testInsertJobRole(additionalJobRoleTestDetails);
+    await testDatabaseCommands.testInsertTraining(trainingTestDetails);
   });
 
   afterEach(async () => {
@@ -96,6 +102,7 @@ describe('dbCommands', async () => {
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
     await testDatabaseCommands.testDeleteBand(additionalBandTestDetails.name);
     await testDatabaseCommands.testDeleteCapability(capabilityTestDetails.name);
+    await testDatabaseCommands.testDeleteTraining(trainingTestDetails.Name);
   });
 
   describe('getRoleAndBandDB', async () => {
@@ -148,6 +155,65 @@ describe('dbCommands', async () => {
         expect(e instanceof DatabaseError).equal(true);
         expect(e.message).to.include('Error calling checkIfJobExists with message');
       }
+    });
+  });
+
+  describe('addBandTests', async () => {
+    describe('checkIfBandExists', async () => {
+      it('Should successfully return band details if band exists using full name to query', async () => {
+        const result = await dbCommands.checkIfBandExists(bandTestDetails.name);
+        expect(result[0].Name).equal(bandTestDetails.name);
+      });
+      it('Should successfully return empty result if band name is not valid', async () => {
+        const result = await dbCommands.checkIfBandExists('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.checkIfBandExists(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling checkIfBandExists with message');
+        }
+      });
+    });
+
+    describe('getBandID', async () => {
+      it('Should successfully return band ID if band exists using full name to query', async () => {
+        const result = await dbCommands.getBandID(bandTestDetails.name);
+        expect(result[0].Band_ID).equal(bandTestDetails.bandId);
+      });
+      it('Should successfully return empty result if band name is not valid', async () => {
+        const result = await dbCommands.getBandID('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.getBandID(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getBandID with message');
+        }
+      });
+    });
+
+    describe('getTrainingID', async () => {
+      it('Should successfully return training ID if band exists using full name to query', async () => {
+        const result = await dbCommands.getTrainingID(trainingTestDetails.Name);
+        expect(result[0].Train_ID).equal(trainingTestDetails.TrainId);
+      });
+      it('Should successfully return empty result if band name is not valid', async () => {
+        const result = await dbCommands.getTrainingID('abc');
+        expect(result.length).equal(0);
+      });
+      it('Should successfully throw Database Error if error occured in database', async () => {
+        try {
+          await dbCommands.getTrainingID(null);
+        } catch (e) {
+          expect(e instanceof DatabaseError).equal(true);
+          expect(e.message).to.include('Error calling getTrainingID with message');
+        }
+      });
     });
   });
 

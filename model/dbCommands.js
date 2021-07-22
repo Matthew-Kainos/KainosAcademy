@@ -88,6 +88,38 @@ exports.checkIfJobExists = async (name) => {
   }
 };
 
+exports.checkIfBandExists = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Band WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkIfBandExists with message: ${e.message}`);
+  }
+};
+
+exports.getBandID = async (bandName) => {
+  try {
+    return await db.query(
+      'SELECT Band_ID FROM Band WHERE Name = ?',
+      [bandName],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getBandID with message: ${e.message}`);
+  }
+};
+
+exports.getTrainingID = async (trainingName) => {
+  try {
+    return await db.query(
+      'SELECT Train_ID FROM Training WHERE Name = ?',
+      [trainingName],
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getTrainingID with message: ${e.message}`);
+  }
+};
+
 exports.getRoleAndBandDB = async (role) => {
   try {
     return await db.query(
