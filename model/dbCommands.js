@@ -48,10 +48,10 @@ exports.getCapabilitiesBasedOnJobId = async (jobId) => {
     throw new DatabaseError(`Error calling getCapabilitiesBasedOnJobId with message: ${e.message}`);
   }
 };
-exports.getCapabilityLead = async (capID) => {
+exports.getCapabilityLead = async (familyID) => {
   try {
     return await db.query(
-      'SELECT Capabilities.cap_ID, Capabilities.Name, Family.Family_ID, Family.Name AS JobFamily, Family.LeadName, Family.LeadMessage, Family.LeadImage FROM Capabilities LEFT JOIN Family ON Capabilities.cap_ID = Family.Cap_ID WHERE Family.Cap_ID = ?;', capID,
+      'SELECT Capabilities.cap_ID, Capabilities.Name, Family.Family_ID, Family.Name AS JobFamily, Family.LeadName, Family.LeadMessage, Family.LeadImage FROM Capabilities LEFT JOIN Family ON Capabilities.cap_ID = Family.Cap_ID WHERE Family.Family_ID = ?;', familyID,
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getCapabilityLead with message: ${e.message}`);
@@ -111,7 +111,7 @@ exports.getAllRolesAndBandDB = async () => {
 exports.getFamilyBasedOnCapability = async (capName) => {
   try {
     return await db.query(
-      'SELECT Capabilities.Cap_ID, Family.Cap_ID, Capabilities.Name AS CapName, Family.Name AS Job_Family FROM Capabilities, Family WHERE Family.Cap_ID = Capabilities.Cap_ID AND Capabilities.Name = ?;', capName,
+      'SELECT Capabilities.Cap_ID, Family.Family_ID, Capabilities.Name AS CapName, Family.Name AS Job_Family FROM Capabilities, Family WHERE Family.Cap_ID = Capabilities.Cap_ID AND Capabilities.Name = ?;', capName,
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getFamilyBasedOnCapability with message: ${e.message}`);

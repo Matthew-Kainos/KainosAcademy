@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const dbCommands = require('../model/dbCommands');
 const DatabaseError = require('../errors/DatabaseError');
-const inputValidator = require('../model/inputValidator');
 
 router.get('/job-roles', async (req, res) => {
   try {
@@ -21,34 +20,6 @@ router.get('/job-roles', async (req, res) => {
   }
 });
 
-router.get('/checkIfJobExists/:jobID', async (req, res) => {
-  try {
-    const { jobID } = req.params;
-    const results = await dbCommands.checkIfJobIdExists(jobID);
-    res.status(200);
-    if (results.length > 0) {
-      res.send(JSON.stringify(true));
-    } else {
-      res.send(JSON.stringify(false));
-    }
-  } catch (e) {
-    res.status(500);
-    res.send('Error');
-  }
-});
-
-router.get('/band/:substr', async (req, res) => {
-  try {
-    const band = req.params.substr;
-    const results = await inputValidator.getRolesByBand(dbCommands, band);
-    res.send(results);
-    res.status(200);
-  } catch (e) {
-    res.status(500);
-    res.send('Error');
-  }
-});
-
 router.get('/band', async (req, res) => {
   try {
     const results = await dbCommands.getAllRolesAndBandDB();
@@ -63,7 +34,7 @@ router.get('/band', async (req, res) => {
 router.get('/checkIfJobExists/:jobName', async (req, res) => {
   try {
     const { jobName } = req.params;
-    const results = await dbCommands.checkIfJobExists(`%${jobName}%`);
+    const results = await dbCommands.checkIfJobExists(`${jobName}`);
     res.status(200);
     if (results.length > 0) {
       res.send(JSON.stringify(true));
