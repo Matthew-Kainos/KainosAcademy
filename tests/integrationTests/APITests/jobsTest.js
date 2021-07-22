@@ -101,7 +101,7 @@ describe('Jobs', () => {
       const getJobSpec = sinon.stub(dbCommands, 'getJobSpec');
       getJobSpec.returns(returnedResults);
       request(app)
-        .get('/jobs/job-spec-roles/1')
+        .get('/jobs/jobSpec/1')
         .set('Accept', 'application/json')
         .expect(200)
         .then((response) => {
@@ -113,7 +113,7 @@ describe('Jobs', () => {
       const getJobSpec = sinon.stub(dbCommands, 'getJobSpec');
       getJobSpec.throws(new DatabaseError());
       request(app)
-        .get('/jobs/job-roles-spec/1')
+        .get('/jobs/jobSpec/1')
         .set('Accept', 'application/json')
         .expect(500)
         .then((response) => {
