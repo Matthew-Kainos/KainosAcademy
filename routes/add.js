@@ -42,14 +42,14 @@ router.post('/role', async (req, res) => {
 router.post('/band', async (req, res) => {
   try {
     const { newBandDetails } = req.body;
-    const results = await dbCommands.checkIfBandExists(newBandDetails.name);
+    const results = await dbCommands.checkIfBandExists(newBandDetails.bandName);
     if (results.length === 0) {
       let newLevel;
-      if (newBandDetails.aboveOrBelow === 'bandAbove') {
-        const level = await dbCommandsAdmin.getBandLevel(newBandDetails.refBand);
+      if (newBandDetails.bandPlace === 'bandAbove') {
+        const level = await dbCommandsAdmin.getBandLevel(newBandDetails.bands);
         newLevel = Number(level[0].Level);
-      } else if (newBandDetails.aboveOrBelow === 'bandBelow') {
-        const level = await dbCommandsAdmin.getBandLevel(newBandDetails.refBand);
+      } else if (newBandDetails.bandPlace === 'bandBelow') {
+        const level = await dbCommandsAdmin.getBandLevel(newBandDetails.bands);
         newLevel = Number(level[0].Level) + 1;
       } else {
         res.send({ success: false, message: "Placement wasn't set" });
@@ -61,7 +61,7 @@ router.post('/band', async (req, res) => {
         await dbCommandsAdmin.addBand(data);
         await addBandController.setTrainingforBand(newBandDetails, dbCommands, dbCommandsAdmin);
       }
-      res.send({ success: true, message: `New Band ${newBandDetails.name} Added` });
+      res.send({ success: true, message: `New Band ${newBandDetails.bandName} Added` });
       res.status(200);
     } else {
       res.send({ success: false, message: 'Unable to add Band due to Duplicate Band Name' });

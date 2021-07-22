@@ -21,11 +21,11 @@ const newRoleDetails = {
 };
 
 const newBandDetails = {
-  name: 'FakeName',
-  aboveOrBelow: 'bandAbove',
-  refBand: 'FakeRefBand',
+  bandName: 'FakeName',
+  bandPlace: 'bandAbove',
+  bands: 'FakeRefBand',
   training: 'FakeTraining',
-  competencies: 'FakeCompetencyLevel',
+  competency: 'FakeCompetencyLevel',
   responsiblities: 'FakeResponsibilities',
 };
 
@@ -86,7 +86,7 @@ describe('Add', () => {
     });
   });
 
-  describe('band', () => {
+  describe('Band', () => {
     it('Should return 200 with success message if new band added to database', async () => {
       const checkIfBandExistsStub = sinon.stub(dbCommands, 'checkIfBandExists');
       const getBandLevelStub = sinon.stub(dbCommandsAdmin, 'getBandLevel');
@@ -111,7 +111,7 @@ describe('Add', () => {
         .send({ newBandDetails })
         .then((response) => {
           expect(response.body.success).to.equal(true);
-          expect(response.body.message).to.equal(`New Band ${newBandDetails.name} Added`);
+          expect(response.body.message).to.equal(`New Band ${newBandDetails.bandName} Added`);
         });
 
       checkIfBandExistsStub.restore();
