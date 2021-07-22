@@ -88,6 +88,7 @@ describe('dbCommandsAdmin', async () => {
     await testDatabaseCommands.testDeleteFamily(familyTestDetails.name);
     await testDatabaseCommands.testDeleteBand(bandTestDetails.name);
     await testDatabaseCommands.testDeleteBand(additionalBandTestDetails.name);
+    await testDatabaseCommands.testDeleteBand('NewTestBandOneFour');
     await testDatabaseCommands.testDeleteTraining(trainingTestDetails.Name);
     await testDatabaseCommands.testDeleteCompetencyLevel(competencyLevelTestDetails.Name);
     await testDatabaseCommands.testRestoreBandLevels();
