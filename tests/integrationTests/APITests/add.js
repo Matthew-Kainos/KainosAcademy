@@ -158,10 +158,10 @@ describe('Add', () => {
         .then((response) => {
           expect(response.text).equal('Database Error');
         });
-        checkIfBandExistsStub.restore();
-      });
+      checkIfBandExistsStub.restore();
     });
-  
+  });
+
   describe('capability', () => {
     it('Should return 200 with success message if new capability added to database', async () => {
       const checkIfCapabilityExistsStub = sinon.stub(dbCommands, 'checkIfCapabilityExists');
