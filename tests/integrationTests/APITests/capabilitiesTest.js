@@ -127,7 +127,7 @@ describe('Capabilities', () => {
 
   describe('viewCapabilityLead', () => {
     it('Should return 200 and correct results if called', () => {
-      const returnedResults = { capID: '1' };
+      const returnedResults = { familyID: 1 };
       const getCapabilityLeadStub = sinon.stub(dbCommands, 'getCapabilityLead');
       getCapabilityLeadStub.returns(returnedResults);
       request(app)
