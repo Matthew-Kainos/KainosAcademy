@@ -126,6 +126,16 @@ exports.getBandIdFromName = async (bandName) => {
   }
 };
 
+exports.getFamilyIdFromName = async (familyName) => {
+  try {
+    return await db.query(
+      'SELECT Family_ID FROM Family WHERE Name = ?', familyName,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling getFamilyIdFromName with message: ${e.message}`);
+  }
+};
+
 exports.checkInsertRole = async (name) => {
   try {
     return await db.query(
@@ -143,6 +153,32 @@ exports.checkInsertCapability = async (name) => {
     );
   } catch (e) {
     throw new DatabaseError(`Error calling checkInsertCapability with message: ${e.message}`);
+  }
+};
+
+exports.addNewFamily = async (familyDetails) => {
+  try {
+    return await db.query(
+      'INSERT INTO GroupBSprint.Family(Name, LeadName, LeadMessage, LeadImage, Cap_ID) VALUES (?, ?, ?, ?, ?)',
+      [familyDetails.familyName,
+        familyDetails.leadName,
+        familyDetails.leadMessage,
+        familyDetails.leadImage,
+        familyDetails.capId],
+    );
+  } catch (e) {
+    console.log(e);
+    throw new DatabaseError(`Error calling addNewFamily with message: ${e.message}`);
+  }
+};
+
+exports.checkInsertFamily = async (name) => {
+  try {
+    return await db.query(
+      'SELECT * FROM Family WHERE Name = ?', name,
+    );
+  } catch (e) {
+    throw new DatabaseError(`Error calling checkInsertFamily with message: ${e.message}`);
   }
 };
 
