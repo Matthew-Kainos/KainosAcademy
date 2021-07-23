@@ -175,7 +175,7 @@ exports.getJobSpec = async (roleID) => {
 exports.getAllFamiliesWithCapability = async () => {
   try {
     return await db.query(
-      'SELECT Capabilities.Name AS Name, Family.Name AS Job_Family FROM Capabilities RIGHT JOIN Family ON Capabilities.Cap_ID = Family.Cap_ID ORDER BY Family.Name;',
+      'SELECT Family.Family_ID, Capabilities.Name AS Name, Family.Name AS Job_Family FROM Capabilities RIGHT JOIN Family ON Capabilities.Cap_ID = Family.Cap_ID ORDER BY Family.Name;',
     );
   } catch (e) {
     throw new DatabaseError(`Error calling getAllJobsWithCapability with message: ${e.message}`);
